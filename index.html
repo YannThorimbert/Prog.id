@@ -26,7 +26,7 @@
         margin : 5px;
         min-width : 300px;
         min-height : 200px;
-        padding: 5px;
+        padding: 8px;
         margin-bottom: 10px;
     }
     input, select{
@@ -45,11 +45,15 @@
         align-items: center;
         justify-content: center;
     }
+    .group_repeat, .group_ifwall{
+        background-color:yellow;
+        padding : 5px;
+    }
     #run_button{
         background-color:green;
         padding : 5px;
     }
-    .input_repeat_lines{
+    .block_lines{
         min-width : 200px;
         min-height: 50px;
         padding : 5px;
@@ -68,10 +72,11 @@
 <div id="buttons_pan">
     <button id="move_button" onclick="click_move()">Move</button><br>
     <button id="turn_button" onclick="click_turn()">Turn</button><br>
+    <button id="ifwall_button" onclick="click_ifwall()">If wall</button><br>
     <button id="repeat_button" onclick="click_repeat()">Repeat</button><br>
     <button id="run_button" onclick="click_run()">Run</button><br>
 </div>
-<div id="code_pan" onClick="refresh_current_repeat()">
+<div id="code_pan" onClick="refresh_current_pan()">
 </div>
 
 
@@ -79,9 +84,9 @@
     var mapstr = "vhhhhhhhhhhhhhhhhhhhhv"+
                  "v                    v"+
                  "v                    v"+
-                 "v           o        v"+
-                 "v                    v"+
-                 "v                    v"+
+                 "v           o v      v"+
+                 "v   v       v        v"+
+                 "v           vv       v"+
                  "v                    v"+
                  "v                    v"+
                  "v                    v"+
@@ -91,7 +96,7 @@
                  "hhhhhhhhhhhhhhhhhhhhhh";
     var ny = 13;
     var nx = mapstr.length / ny;
-    var INTERVAL = 50
+    var INTERVAL = 50;
     var intervalMainLoop = null;
     var MOVE = "Avancer de ";
     var TXT_AFTER_MOVE = " cases"
@@ -99,11 +104,11 @@
     var TXT_AFTER_TURN = ""
     var REPEAT = "Répéter "
     var TXT_AFTER_REPEAT = " fois"
-    var IF_WALL = "Si prochaine case est un mur "
+    var IF_WALL = "Si la prochaine case est un mur..."
     var GAME_OVER = "Perdu !"
     var RUN = "Executer les ordres"
     var CELL_SIZE = 32;
-    var VELOCITY = 8; //must be a divider of cell size
+    var VELOCITY; //must be a divider of cell size
     var icode = 0;
     var frame = 0;
     /*var user_code = [MOVE + "5",
@@ -146,13 +151,17 @@
     wall_h.src = "./wall_h.png"
     var walls_h = [];
     var walls_v = [];
-    var current_repeat = document.getElementById("code_pan");
+    var current_pan = document.getElementById("code_pan");
     initialize_run();
 
     function get_cell(){
-        var x = parseInt((img_obj.x+CELL_SIZE/2)/CELL_SIZE);
-        var y = parseInt((img_obj.y+CELL_SIZE/2)/CELL_SIZE);
-        return [x,y];
+        return pix_to_cell(img_obj.x+CELL_SIZE/2, img_obj.y+CELL_SIZE/2)
+    }
+
+    function pix_to_cell(x,y){
+        var cx = parseInt(x/CELL_SIZE);
+        var cy = parseInt(y/CELL_SIZE);
+        return [cx,cy];
     }
 
     function orientation_from_vel(){
@@ -191,25 +200,26 @@
             console.log("");
             console.log("***");
             console.log("instructions", instructions_repeat.slice());
-            console.log("icode", icode_repeat.slice());
+            console.log("icode_repeat before increment", icode_repeat.slice());
             console.log("nrepeat", n_repeat.slice());
             var level = instructions_repeat.length - 1; //index of current code
-            var current_code = instructions_repeat[level];
+            var current_code = instructions_repeat[level].slice();
             icode_repeat[level] += 1;
-            console.log("level=",level);
+            console.log("level=",level, "i=", icode_repeat[level]);
             if(icode_repeat[level] >= current_code.length){
                 console.log("============>");
                 if(level == 0){ //end of program
                     img_obj.velocity = 0;
                     img_obj.current = 0
                     console.log("END OF PROGRAM");
+                    console.log(img_obj.x);
                     gameover = true;
                     clearInterval(intervalMainLoop);
                     return '';
                 }
                 else{
                     n_repeat[level] -= 1;
-                    if(n_repeat[level] == 0){ //enf of loop
+                    if(n_repeat[level] == 0){ //end of loop
                         n_repeat.pop();
                         instructions_repeat.pop();
                         icode_repeat.pop();
@@ -231,37 +241,84 @@
         console.log("       xcodeline", codeline, split_line, argument, MOVE, codeline.includes(MOVE));
         ////////////////////////////////////////////////////////////////////////
         if(codeline.includes(MOVE)){
-            move_char(argument);
+            set_char_goal_pos(argument);
         }
         else if(codeline.includes(TURN)){
             turn_char(argument);
         }
-        else if(codeline.includes(REPEAT)){
-            console.log("LOG REPEAT", current_code[icode_repeat[level]]);
-            instructions = [];
-            while(true){
-                icode_repeat[level] += 1 //at this level, "repeat" is already read
-                var s = current_code[icode_repeat[level]];
-                instructions.push(s);
-                if(s.startsWith('#')){
-                    break;
+        else{
+            var rep = codeline.includes(REPEAT);
+            var wall = codeline.includes(IF_WALL);
+            if( rep || wall ){
+                console.log("REP OU WALL");
+                var i = icode_repeat[level];
+                var i_last_end = -1;
+                while(true){
+                    i += 1 //at this level, "repeat" or "if" is already read
+                    if(i >= current_code.length)
+                        break;
+                    var s = current_code[i];
+                    if(s.startsWith('#')){
+                        i_last_end = i;
+                    }
+                }
+                instructions = current_code.slice(icode_repeat[level]+1, i_last_end);
+                icode_repeat[level] = i_last_end;
+                if(rep){
+                    console.log("LOG REPEAT", instructions.slice());
+                    n_repeat.push(argument);
+                    instructions_repeat.push(instructions);
+                    icode_repeat.push(-1);
+                }
+                else if(wall && next_is_wall()){ //"if" is just a loop that we take once
+                    console.log("LOG IF WALL", instructions.slice(), char_touch_wall());
+                    n_repeat.push(1);
+                    instructions_repeat.push(instructions);
+                    icode_repeat.push(-1);
+                    console.log(img_obj.x);
+                    /*
+                    var i = icode_repeat[level]; //where we want to insert instructions
+                    var L = instructions.length;
+                    console.log("BEFORE:", instructions_repeat[level]);
+                    instructions_repeat[level] = current_code.slice(0,i); //i+1 ?
+                    for(var i=0; i<L; i++){
+                        instructions_repeat.push("*"+instructions[i]);
+                    }
+                    instructions_repeat[level] += current_code.slice(i+L);
+                    console.log("AFTER:", instructions_repeat[level]);
+                    */
                 }
             }
-            n_repeat.push(argument);
-            instructions_repeat.push(instructions);
-            icode_repeat.push(-1);
-        }
-        else if(codeline == IF_WALL){
-            console.log("IF WALL");
         }
         return codeline;
     }
 
-    function move_char(argument){
-        console.log("move char -->", argument);
+    function next_is_wall(){
+        //var x = img_obj.x + img_obj.vx * img_obj.velocity + CELL_SIZE/2;
+        //var y = img_obj.y + img_obj.vy * img_obj.velocity + CELL_SIZE/2;
+        /*
+        if(goal_x === null || goal_y === null)
+            return false;
+        var x = goal_x + CELL_SIZE/2;
+        var y = goal_y + CELL_SIZE/2;
+        var coord = pix_to_cell(x,y);
+        */
+        var coord = get_cell();
+        coord[0] += img_obj.vx;
+        coord[1] += img_obj.vy
+        console.log("WALL ?", get_cell(), coord, is_wall(get_cell()), is_wall(coord));
+        if(is_wall(coord)){ //topleft
+            return true;
+        }
+        return false;
+    }
+
+    function set_char_goal_pos(argument){
         img_obj.velocity = VELOCITY;
         goal_x = img_obj.x + img_obj.vx * argument * CELL_SIZE;
         goal_y = img_obj.y + img_obj.vy * argument * CELL_SIZE;
+        var future_pos = pix_to_cell(goal_x+CELL_SIZE/2, goal_y+CELL_SIZE/2);
+        console.log("goal pos +=", argument, get_cell(), img_obj.x, future_pos, goal_x, is_wall(future_pos));
         goal_achieved = false;
     }
 
@@ -281,9 +338,10 @@
         if(goal_x == img_obj.x && goal_y == img_obj.y){
             console.log("Goal position ok");
             goal_achieved = true;
+            img_obj.velocity = 0;
         }
         else if(char_touch_wall()){
-            console.log("Game over touch wall");
+            console.log("Game over touch wall", get_cell());
             context.font = "30px Arial";
             context.rect(0,0,canvas.width,canvas.height);
             context.fillStyle = "rgba(255, 255, 255, 0.5)";
@@ -297,6 +355,7 @@
     }
 
     function draw_anim() { // context is the canvas 2d context.
+        console.log("***draw***");
         context.clearRect(0, 0, canvas.width, canvas.height);  // clear canvas
         draw_grid();
         draw_walls();
@@ -345,14 +404,23 @@
     }
 
     function is_wall(coord){
-         var i = nx * coord[1] + coord[0];
-         return mapstr[i]=="v" || mapstr[i]=="h";
+        if (coord[0] >= nx)
+            return true;
+        else if(coord[0] < 0)
+            return true;
+        else if(coord[1] >= ny)
+            return true;
+        else if (coord[1] < 0)
+            return true;
+        var i = nx * coord[1] + coord[0];
+        return mapstr[i]=="v" || mapstr[i]=="h";
     }
 
     function char_touch_wall(){
         if(is_wall(get_cell())){ //topleft
             return true;
         }
+        /*
         else{ //bottom right
             var delta = parseInt(0.75*CELL_SIZE);
             var x = img_obj.x + delta;
@@ -360,7 +428,7 @@
             x = parseInt(x/CELL_SIZE);
             y = parseInt(y/CELL_SIZE);
             return is_wall([x,y]);
-        }
+        }*/
     }
 
     function click_run(){
@@ -372,7 +440,7 @@
     }
 
     function initialize_run(){
-        VELOCITY = 8; //must be a divider of cell size
+        VELOCITY = 4; //must be a divider of cell size
         icode = 0;
         frame = 0;
         goal_x = null;
@@ -420,7 +488,8 @@
         xrem.className = "xremove";
         xrem.onclick = function (){
             var p = this.parentElement;
-            if(this.parentElement.innerHTML.includes(REPEAT)){
+            var cn = this.parentElement.className;
+            if( cn == "codel repeat" || cn == "codel ifwall"){
                 p.parentElement.parentElement.removeChild(p.parentElement);
             }
             else{
@@ -440,19 +509,20 @@
         node.appendChild(xrem);
         //
         var more = document.createElement("div");
-        if(current_repeat.className.includes("repeat")){
-            more.level = current_repeat.level + 1;
+        if(current_pan.className == "block_lines"){
+            more.level = current_pan.level + 1;
         }
         else{
             more.level = 1;
         }
-        more.className = "input_repeat_lines";
+        more.className = "block_lines";
         //
         var group = document.createElement("div");
         group.className = "group_repeat";
         group.appendChild(node);
         group.appendChild(more);
-        current_repeat.appendChild(group);
+        current_pan.appendChild(group);
+        set_current_pan(more);
     }
 
     function click_move(){
@@ -463,7 +533,7 @@
         node.innerHTML = code;
         var xrem = create_xrem();
         node.appendChild(xrem);
-        current_repeat.appendChild(node);
+        current_pan.appendChild(node);
     }
 
     function click_turn(){
@@ -478,7 +548,32 @@
         node.innerHTML = code;
         var xrem = create_xrem();
         node.appendChild(xrem);
-        current_repeat.appendChild(node);
+        current_pan.appendChild(node);
+    }
+
+    function click_ifwall(){
+        var base = "";
+        var code = get_code_element(IF_WALL, "", base);
+        var node = document.createElement("div");
+        node.className = "codel ifwall";
+        node.innerHTML = code;
+        var xrem = create_xrem();
+        node.appendChild(xrem);
+        var more = document.createElement("div");
+        if(current_pan.className == "block_lines"){
+            more.level = current_pan.level + 1;
+        }
+        else{
+            more.level = 1;
+        }
+        more.className = "block_lines";
+        //
+        var group = document.createElement("div");
+        group.className = "group_ifwall";
+        group.appendChild(node);
+        group.appendChild(more);
+        current_pan.appendChild(group);
+        set_current_pan(more);
     }
 
     function collect_user_code(e, code, level){
@@ -506,7 +601,14 @@
                     var el = child.getElementsByClassName('input_repeat')[0];
                     code.push(REPEAT + el.value);
                     console.log("APPEND", prefix + REPEAT + el.value);
-                    var e = child.getElementsByClassName('input_repeat_lines')[0]
+                    var e = child.getElementsByClassName('block_lines')[0]
+                    collect_user_code(e, code, level+1);
+                    code.push(prefix+"#");
+                }
+                else if(child.className == "group_ifwall"){
+                    code.push(IF_WALL);
+                    console.log("APPEND", prefix + IF_WALL);
+                    var e = child.getElementsByClassName('block_lines')[0]
                     collect_user_code(e, code, level+1);
                     code.push(prefix+"#");
                 }
@@ -521,28 +623,40 @@
         return code;
     }
 
-    function refresh_current_repeat(){
+    function refresh_current_pan(){
         var DEF_COLOR = "cyan";
-        var candidates = document.getElementsByClassName("input_repeat_lines");
+        var candidates = document.getElementsByClassName("block_lines");
         var highest_level = 0;
         for(var i=0; i<candidates.length; i++){
             var e = candidates[i];
             e.style.backgroundColor = DEF_COLOR;
             if(e.matches(":hover")){
                 if(e.level > highest_level){
-                    current_repeat = e;
+                    current_pan = e;
                     highest_level = e.level;
                 }
             }
         }
         if(highest_level == 0)
-            current_repeat = document.getElementById("code_pan");
+            current_pan = document.getElementById("code_pan");
         else
-            current_repeat.style.backgroundColor = "red";
+            current_pan.style.backgroundColor = "red";
+    }
+
+    function set_current_pan(e){
+        var DEF_COLOR = "cyan";
+        var candidates = document.getElementsByClassName("block_lines");
+        for(var i=0; i<candidates.length; i++){
+            var e = candidates[i];
+            e.style.backgroundColor = DEF_COLOR;
+        }
+        current_pan = e;
+        current_pan.style.backgroundColor = "red";
     }
 
     document.getElementById("move_button").innerHTML = MOVE + "...";
     document.getElementById("turn_button").innerHTML = TURN + "...";
+    document.getElementById("ifwall_button").innerHTML = IF_WALL + "...";
     document.getElementById("repeat_button").innerHTML = REPEAT + "...";
     document.getElementById("run_button").innerHTML = RUN;
 </script>
