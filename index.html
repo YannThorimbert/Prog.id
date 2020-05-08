@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <style>
     #canvas_pan{
-        float:right;
+        float:left;
         display: inline-block;
         background-color: cyan;
         padding : 5px;
@@ -52,6 +52,16 @@
     #run_button{
         background-color:green;
         padding : 5px;
+        border-radius: 4px;
+        border-color:green;
+        color: white;
+    }
+    #pause_button{
+        background-color:red;
+        padding : 5px;
+        border-radius: 4px;
+        border-color:red;
+        color: white;
     }
     .block_lines{
         min-width : 200px;
@@ -70,18 +80,21 @@
     <canvas id="icanvas" width=640 height=500></canvas>
 </div>
 <div id="buttons_pan">
+<!--
     <button id="move_button" onclick="click_move()">Move</button><br>
     <button id="turn_button" onclick="click_turn()">Turn</button><br>
     <button id="ifwall_button" onclick="click_ifwall()">If wall</button><br>
     <button id="else_button" onclick="click_else()">Else</button><br>
     <button id="repeat_button" onclick="click_repeat()">Repeat</button><br>
+    -->
     <button id="run_button" onclick="click_run()">Run</button><br>
+    <button id="pause_button" onclick="click_pause()">Pause</button><br>
 </div>
 <!--<div id="code_pan" onClick="refresh_current_pan()">-->
 <textarea id="code_pan" name="subject" placeholder="Ecris ton code ici...">
-Répéter:1000
+Répéter:toujours
 {
-    Si mur proche:
+    Si mur:
     {
         Tourner:90
     }
@@ -95,28 +108,29 @@ Répéter:1000
 <script>
     var mapstr = "vhhhhhhhhhhhhhhhhhhhhv"+
                  "v       v            v"+
-                 "v                    v"+
+                 "v             *      v"+
                  "v      o          v  v"+
                  "v                    v"+
                  "v    v          vv   v"+
+                 "v            *       v"+
                  "v                    v"+
-                 "v                    v"+
-                 "v        v           v"+
+                 "v  *     v           v"+
                  "v                    v"+
                  "v    v           v   v"+
                  "v                    v"+
                  "hhhhhhhhhhhhhhhhhhhhhh";
     var ny = 13;
     var nx = mapstr.length / ny;
-    var INTERVAL = 50;
+    var INTERVAL = 40;
     var intervalMainLoop = null;
+    var FOREVER = "toujours"
     var MOVE = "Avancer:";
     var TXT_AFTER_MOVE = " cases"
     var TURN = "Tourner:";
     var TXT_AFTER_TURN = ""
     var REPEAT = "Répéter:"
     var TXT_AFTER_REPEAT = " fois"
-    var IF_WALL = "Si mur proche:"
+    var IF_WALL = "Si mur:"
     var ELSE = "Sinon:"
     var GAME_OVER = "Perdu !"
     var RUN = "Executer les ordres"
@@ -156,8 +170,11 @@ Répéter:1000
     wall_v.src = "./wall_v.png"
     var wall_h = new Image();
     wall_h.src = "./wall_h.png"
+    var gold = new Image();
+    gold.src = "./coin_rotate_32.png"
     var walls_h = [];
     var walls_v = [];
+    var coins = [];
     var current_pan = document.getElementById("code_pan");
     initialize_run();
 
@@ -184,7 +201,7 @@ Répéter:1000
             console.log("Invalid velocity");
     }
 
-    function set_char_orientation(what){
+    function set_char_orientation(what){ //bouton stop ; else ; monnaie ; explications
         img_obj.total_frames = nframes[what];
         img_obj.current = 0;
         img_obj.source = img;
@@ -284,7 +301,6 @@ Répéter:1000
         var coord = get_cell();
         coord[0] += img_obj.vx;
         coord[1] += img_obj.vy
-        console.log("WALL ?", get_cell(), coord, is_wall(get_cell()), is_wall(coord));
         if(is_wall(coord)){ //topleft
             return true;
         }
@@ -296,7 +312,6 @@ Répéter:1000
         goal_x = img_obj.x + img_obj.vx * argument * CELL_SIZE;
         goal_y = img_obj.y + img_obj.vy * argument * CELL_SIZE;
         var future_pos = pix_to_cell(goal_x+CELL_SIZE/2, goal_y+CELL_SIZE/2);
-        console.log("goal pos +=", argument, get_cell(), img_obj.x, future_pos, goal_x, is_wall(future_pos));
         goal_achieved = false;
     }
 
@@ -336,10 +351,11 @@ Répéter:1000
         console.log("***draw***");
         context.clearRect(0, 0, canvas.width, canvas.height);  // clear canvas
         draw_grid();
-        draw_walls();
         context.drawImage(img_obj.source, img_obj.current * img_obj.width, 0,
                               img_obj.width, img_obj.height,
                               img_obj.x, img_obj.y, img_obj.width, img_obj.height);
+        draw_walls();
+        draw_gold();
         if(img_obj.velocity == 0){
             img_obj.current = 0;
         }
@@ -350,6 +366,19 @@ Répéter:1000
         }
     }
 
+    function draw_gold(){
+         for (var i=0; i < coins.length; i++){
+            var infos = coins[i];
+            var current = infos[2];
+            context.drawImage(gold, current * 32, 0,
+                              32, 32,
+                              infos[0]*CELL_SIZE, infos[1]*CELL_SIZE, 32, 32);
+            if(frame%5 == 0){
+                current = (current+1)%2;
+                coins[i][2] = current;
+            }
+        }
+    }
 
     function draw_grid(){
         for (var x = 0.; x < canvas.width; x += CELL_SIZE) {
@@ -394,6 +423,11 @@ Répéter:1000
         return mapstr[i]=="v" || mapstr[i]=="h";
     }
 
+    function is_gold(coord){
+        var i = nx * coord[1] + coord[0];
+        return mapstr[i]=="*";
+    }
+
     function char_touch_wall(){
         if(is_wall(get_cell())){ //topleft
             return true;
@@ -410,6 +444,7 @@ Répéter:1000
     }
 
     function click_run(){
+        clearInterval(intervalMainLoop);
         user_code = get_user_code();
         console.log("USER CODE", user_code);
         initialize_run();
@@ -428,6 +463,9 @@ Répéter:1000
         n_repeat = [1];
         instructions_repeat = [user_code];
         icode_repeat = [-1];
+        walls_v = [];
+        walls_h = [];
+        coins = [];
         for(var i=0; i<mapstr.length; i++){
             var x = i%nx;
             var y = parseInt(i/nx);
@@ -438,6 +476,9 @@ Répéter:1000
             else if(mapstr[i]=="o"){
                 img_obj.x = x*CELL_SIZE;
                 img_obj.y = y*CELL_SIZE;
+            }
+            else if(mapstr[i]=="*"){
+                coins.push([x,y,i%2]);
             }
         }
         img_obj.vx = 0;
@@ -710,7 +751,9 @@ Répéter:1000
         var value = document.getElementById("code_pan").value.split("\n");
         var collected = []
         for(var i=0; i<value.length; i++){
-            collected.push(value[i].trim());
+            var txt = value[i].trim();
+            txt = txt.replace(FOREVER, "1000000");
+            collected.push(txt);
         }
         console.log("COLLECTED:");
         console.log(collected);
@@ -749,12 +792,12 @@ Répéter:1000
         current_pan = e;
         current_pan.style.backgroundColor = "red";
     }
-
+/*
     document.getElementById("move_button").innerHTML = MOVE + "...";
     document.getElementById("turn_button").innerHTML = TURN + "...";
     document.getElementById("ifwall_button").innerHTML = IF_WALL + "...";
     document.getElementById("else_button").innerHTML = ELSE + "...";
-    document.getElementById("repeat_button").innerHTML = REPEAT + "...";
+    document.getElementById("repeat_button").innerHTML = REPEAT + "...";*/
     document.getElementById("run_button").innerHTML = RUN;
     var textareas = document.getElementsByTagName('textarea');
     var count = textareas.length;
@@ -768,6 +811,18 @@ Répéter:1000
             }
         }
     }
+
+    function click_pause(){
+        gameover = true;
+        clearInterval(intervalMainLoop);
+    }
+
+    initialize_run();
+    frame = 0;
+    img_obj.velocity = 1;
+    var k = 0;
+    intervalMainLoop = setInterval(function(){ frame++;draw_anim(); }, INTERVAL);
+    img_obj.velocity = 0;
 </script>
 
 </body>
