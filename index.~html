@@ -45,7 +45,7 @@
         align-items: center;
         justify-content: center;
     }
-    .group_repeat, .group_ifwall{
+    .group_repeat, .group_ifwall, .group_else{
         background-color:yellow;
         padding : 5px;
     }
@@ -73,50 +73,57 @@
     <button id="move_button" onclick="click_move()">Move</button><br>
     <button id="turn_button" onclick="click_turn()">Turn</button><br>
     <button id="ifwall_button" onclick="click_ifwall()">If wall</button><br>
+    <button id="else_button" onclick="click_else()">Else</button><br>
     <button id="repeat_button" onclick="click_repeat()">Repeat</button><br>
     <button id="run_button" onclick="click_run()">Run</button><br>
 </div>
-<div id="code_pan" onClick="refresh_current_pan()">
+<!--<div id="code_pan" onClick="refresh_current_pan()">-->
+<textarea id="code_pan" name="subject" placeholder="Ecris ton code ici...">
+Répéter:1000
+{
+    Si mur proche:
+    {
+        Tourner:90
+    }
+    Avancer:1
+}
+</textarea>
+
 </div>
 
 
 <script>
     var mapstr = "vhhhhhhhhhhhhhhhhhhhhv"+
+                 "v       v            v"+
+                 "v                    v"+
+                 "v      o          v  v"+
+                 "v                    v"+
+                 "v    v          vv   v"+
                  "v                    v"+
                  "v                    v"+
-                 "v           o v      v"+
-                 "v   v                v"+
-                 "v           vv       v"+
+                 "v        v           v"+
                  "v                    v"+
-                 "v                    v"+
-                 "v                    v"+
-                 "v                    v"+
-                 "v                    v"+
+                 "v    v           v   v"+
                  "v                    v"+
                  "hhhhhhhhhhhhhhhhhhhhhh";
     var ny = 13;
     var nx = mapstr.length / ny;
     var INTERVAL = 50;
     var intervalMainLoop = null;
-    var MOVE = "Avancer de ";
+    var MOVE = "Avancer:";
     var TXT_AFTER_MOVE = " cases"
-    var TURN = "Tourner de ";
+    var TURN = "Tourner:";
     var TXT_AFTER_TURN = ""
-    var REPEAT = "Répéter "
+    var REPEAT = "Répéter:"
     var TXT_AFTER_REPEAT = " fois"
-    var IF_WALL = "Si la prochaine case est un mur..."
+    var IF_WALL = "Si mur proche:"
+    var ELSE = "Sinon:"
     var GAME_OVER = "Perdu !"
     var RUN = "Executer les ordres"
     var CELL_SIZE = 32;
     var VELOCITY; //must be a divider of cell size
     var icode = 0;
     var frame = 0;
-    /*var user_code = [MOVE + "5",
-                     REPEAT + "4",
-                        TURN + "90",
-                        MOVE + "3",
-                        '#',
-                     MOVE + "10"];*/
     var user_code = [];
     var gameover = false;
     var canvas = document.getElementById('icanvas');
@@ -236,58 +243,29 @@
         console.log("CURRENT_CODE", current_code.slice(), icode_repeat.slice());
         console.log("level and icode_repeat[level]", level, icode_repeat[level]);
         console.log("       codeline", codeline);
-        var split_line = codeline.split(" ");
-        var argument = parseInt(split_line[split_line.length - 1]);
-        console.log("       xcodeline", codeline, split_line, argument, MOVE, codeline.includes(MOVE));
         ////////////////////////////////////////////////////////////////////////
-        if(codeline.includes(MOVE)){
-            set_char_goal_pos(argument);
+        if(codeline[0].includes(MOVE)){
+            set_char_goal_pos(codeline[1]);
         }
-        else if(codeline.includes(TURN)){
-            turn_char(argument);
+        else if(codeline[0].includes(TURN)){
+            turn_char(codeline[1]);
         }
         else{
-            var rep = codeline.includes(REPEAT);
-            var wall = codeline.includes(IF_WALL);
-            if( rep || wall ){
-                console.log("REP OU WALL");
-                var i = icode_repeat[level];
-                var i_last_end = -1;
-                while(true){
-                    i += 1 //at this level, "repeat" or "if" is already read
-                    if(i >= current_code.length)
-                        break;
-                    var s = current_code[i];
-                    if(s.startsWith('#')){
-                        i_last_end = i;
-                    }
-                }
-                instructions = current_code.slice(icode_repeat[level]+1, i_last_end);
-                icode_repeat[level] = i_last_end;
-                if(rep){
-                    console.log("LOG REPEAT", instructions.slice());
-                    n_repeat.push(argument);
-                    instructions_repeat.push(instructions);
-                    icode_repeat.push(-1);
-                }
-                else if(wall && next_is_wall()){ //"if" is just a loop that we take once
+            if(codeline[0].includes(REPEAT)){
+                var n = codeline[1];
+                var instructions = codeline[2];
+                console.log("LOG REPEAT", instructions.slice());
+                n_repeat.push(n);
+                instructions_repeat.push(instructions);
+                icode_repeat.push(-1);
+            }
+            else if(codeline[0].includes(IF_WALL) && next_is_wall()){
+                    var instructions = codeline[1];
                     console.log("LOG IF WALL", instructions.slice(), char_touch_wall());
-                    n_repeat.push(1);
+                    n_repeat.push(1); //"if" is just a loop that we take once
                     instructions_repeat.push(instructions);
                     icode_repeat.push(-1);
                     console.log(img_obj.x);
-                    /*
-                    var i = icode_repeat[level]; //where we want to insert instructions
-                    var L = instructions.length;
-                    console.log("BEFORE:", instructions_repeat[level]);
-                    instructions_repeat[level] = current_code.slice(0,i); //i+1 ?
-                    for(var i=0; i<L; i++){
-                        instructions_repeat.push("*"+instructions[i]);
-                    }
-                    instructions_repeat[level] += current_code.slice(i+L);
-                    console.log("AFTER:", instructions_repeat[level]);
-                    */
-                }
             }
         }
         return codeline;
@@ -489,7 +467,7 @@
         xrem.onclick = function (){
             var p = this.parentElement;
             var cn = this.parentElement.className;
-            if( cn == "codel repeat" || cn == "codel ifwall"){
+            if( cn == "codel repeat" || cn == "codel ifwall" || cn == "codel else"){
                 p.parentElement.parentElement.removeChild(p.parentElement);
             }
             else{
@@ -576,6 +554,31 @@
         set_current_pan(more);
     }
 
+    function click_else(){
+        var base = "";
+        var code = get_code_element(ELSE, "", base);
+        var node = document.createElement("div");
+        node.className = "codel else";
+        node.innerHTML = code;
+        var xrem = create_xrem();
+        node.appendChild(xrem);
+        var more = document.createElement("div");
+        if(current_pan.className == "block_lines"){
+            more.level = current_pan.level + 1;
+        }
+        else{
+            more.level = 1;
+        }
+        more.className = "block_lines";
+        //
+        var group = document.createElement("div");
+        group.className = "group_else";
+        group.appendChild(node);
+        group.appendChild(more);
+        current_pan.appendChild(group);
+        set_current_pan(more);
+    }
+
     function collect_user_code(e, code, level){
         var children = e.childNodes;
         var prefix = "#".repeat(level); //not needed, but more readable
@@ -600,26 +603,119 @@
                 else if(child.className == "group_repeat"){
                     var el = child.getElementsByClassName('input_repeat')[0];
                     code.push(REPEAT + el.value);
+                    code.push("{");
                     console.log("APPEND", prefix + REPEAT + el.value);
                     var e = child.getElementsByClassName('block_lines')[0]
                     collect_user_code(e, code, level+1);
-                    code.push(prefix+"#");
+                    code.push("}");
                 }
                 else if(child.className == "group_ifwall"){
                     code.push(IF_WALL);
                     console.log("APPEND", prefix + IF_WALL);
+                    code.push("{");
                     var e = child.getElementsByClassName('block_lines')[0]
                     collect_user_code(e, code, level+1);
-                    code.push(prefix+"#");
+                    code.push("}");
                 }
             }
         }
     }
 
+
+    function transpile_user_code(collected, to_treat, code, level){
+        console.log("COLLECT", level);
+        for(var i=0; i<to_treat.length; i++){
+            var sep = to_treat[i].split(":");
+            console.log("TREAT", to_treat[i], sep);
+            if(to_treat[i].includes(MOVE)){
+                console.log("   move");
+                code.push([MOVE, parseInt(sep[1])]);
+            }
+            else if(to_treat[i].includes(TURN)){
+                console.log("   turn");
+                code.push([TURN, parseInt(sep[1])]);
+            }
+            else{
+                var inner_lines = get_inner_lines(to_treat, i);
+                console.log("   INNER LINES", inner_lines);
+                var inner_code = []
+                transpile_user_code(collected, inner_lines, inner_code, level+1);
+                if(to_treat[i].includes(REPEAT)){
+                    var n = parseInt(sep[1]);
+                    code.push([REPEAT, n, inner_code]);
+                }
+                else if(to_treat[i].includes(IF_WALL))
+                    code.push([IF_WALL, inner_code]);
+                else
+                    console.log("AFFICHER MSG ERREUR");
+                i += inner_lines.length + 2;
+            }
+        }
+    }
+
+    function get_inner_lines(collected, icode){
+        instructions = [];
+        var i = icode + 2;
+        var counter_open = 0;
+        console.log("enter inner", i, collected);
+        while(i < collected.length){
+            console.log("       inner", collected[i]);
+            if(collected[i].startsWith('{'))
+                counter_open++;
+            else if(collected[i].startsWith('}'))
+                counter_open--;
+            if(counter_open < 0){
+                break;
+            }
+            else
+                instructions.push(collected[i]);
+            i++;
+        }
+        return instructions;
+    }
+
     function get_user_code(){
+        /*
         var e = document.getElementById("code_pan");
+        var collected = [];
+        collect_user_code(e, collected, 0);
+        */
+        /*
+        var collected = [MOVE + "5",
+                        REPEAT + "4",
+                        "{",
+                            REPEAT + "4",
+                            "{",
+                                TURN + "90",
+                                MOVE + "1",
+                            "}",
+                            TURN + "90",
+                            MOVE + "3",
+                        "}",
+                        MOVE + "10"];
+        */
+        /*
+        var collected = [REPEAT + "10000",
+                        "{",
+                            REPEAT + "3",
+                            "{",
+                                IF_WALL,
+                                "{",
+                                    TURN + "90",
+                                "}",
+                            "}",
+                            MOVE + "1",
+                        "}"];
+        */
+        var value = document.getElementById("code_pan").value.split("\n");
+        var collected = []
+        for(var i=0; i<value.length; i++){
+            collected.push(value[i].trim());
+        }
+        console.log("COLLECTED:");
+        console.log(collected);
         var code = [];
-        collect_user_code(e, code, 0);
+        transpile_user_code(collected, collected, code, 0);
         return code;
     }
 
@@ -657,8 +753,21 @@
     document.getElementById("move_button").innerHTML = MOVE + "...";
     document.getElementById("turn_button").innerHTML = TURN + "...";
     document.getElementById("ifwall_button").innerHTML = IF_WALL + "...";
+    document.getElementById("else_button").innerHTML = ELSE + "...";
     document.getElementById("repeat_button").innerHTML = REPEAT + "...";
     document.getElementById("run_button").innerHTML = RUN;
+    var textareas = document.getElementsByTagName('textarea');
+    var count = textareas.length;
+    for(var i=0;i<count;i++){
+        textareas[i].onkeydown = function(e){
+            if(e.keyCode==9 || e.which==9){
+                e.preventDefault();
+                var s = this.selectionStart;
+                this.value = this.value.substring(0,this.selectionStart) + "\t" + this.value.substring(this.selectionEnd);
+                this.selectionEnd = s + "\t".length;
+            }
+        }
+    }
 </script>
 
 </body>
