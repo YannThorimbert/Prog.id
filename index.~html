@@ -28,6 +28,7 @@
         min-height : 200px;
         padding: 8px;
         margin-bottom: 10px;
+        font-size:1.3em;
     }
     input, select{
         max-width:50px;
@@ -80,18 +81,18 @@
     <canvas id="icanvas" width=640 height=500></canvas>
 </div>
 <div id="buttons_pan">
-<!--
+
     <button id="move_button" onclick="click_move()">Move</button><br>
     <button id="turn_button" onclick="click_turn()">Turn</button><br>
     <button id="ifwall_button" onclick="click_ifwall()">If wall</button><br>
     <button id="else_button" onclick="click_else()">Else</button><br>
     <button id="repeat_button" onclick="click_repeat()">Repeat</button><br>
-    -->
+
     <button id="run_button" onclick="click_run()">Run</button><br>
     <button id="pause_button" onclick="click_pause()">Pause</button><br>
 </div>
-<!--<div id="code_pan" onClick="refresh_current_pan()">-->
-<textarea id="code_pan" name="subject" placeholder="Ecris ton code ici...">
+<div id="code_pan" onClick="refresh_current_pan()">
+<!--<textarea id="code_pan" name="subject" placeholder="Ecris ton code ici...">-->
 Répéter:toujours
 {
     Si mur:
@@ -109,9 +110,9 @@ Répéter:toujours
     var mapstr = "vhhhhhhhhhhhhhhhhhhhhv"+
                  "v       v            v"+
                  "v             *      v"+
-                 "v      o          v  v"+
+                 "v      o   *****  v  v"+
                  "v                    v"+
-                 "v    v          vv   v"+
+                 "v    v vvvvvvvv vv   v"+
                  "v            *       v"+
                  "v                    v"+
                  "v  *     v           v"+
@@ -122,18 +123,19 @@ Répéter:toujours
     var ny = 13;
     var nx = mapstr.length / ny;
     var INTERVAL = 40;
+    var INTERVAL_ANIM = 40;
     var intervalMainLoop = null;
-    var FOREVER = "toujours"
+    var FOREVER = "toujours";
     var MOVE = "Avancer:";
-    var TXT_AFTER_MOVE = " cases"
+    var TXT_AFTER_MOVE = " cases";
     var TURN = "Tourner:";
-    var TXT_AFTER_TURN = ""
-    var REPEAT = "Répéter:"
-    var TXT_AFTER_REPEAT = " fois"
-    var IF_WALL = "Si mur proche:"
-    var ELSE = "Sinon:"
-    var GAME_OVER = "Perdu !"
-    var RUN = "Executer les ordres"
+    var TXT_AFTER_TURN = "";
+    var REPEAT = "Répéter:";
+    var TXT_AFTER_REPEAT = " fois";
+    var IF_WALL = "Si mur:";
+    var ELSE = "Sinon:";
+    var GAME_OVER = "Perdu !";
+    var RUN = "Executer les ordres";
     var CELL_SIZE = 32;
     var VELOCITY; //must be a divider of cell size
     var icode = 0;
@@ -444,12 +446,13 @@ Répéter:toujours
     }
 
     function click_run(){
-        clearInterval(intervalMainLoop);
+        //clearInterval(intervalMainLoop);
         user_code = get_user_code();
         console.log("USER CODE", user_code);
         initialize_run();
         console.log("START MAIN LOOP");
-        intervalMainLoop = setInterval(function(){ main_loop(); }, INTERVAL);
+        //intervalMainLoop = setInterval(function(){ main_loop(); }, INTERVAL);
+        requestAnimationFrame(main_loop);
     }
 
     function initialize_run(){
@@ -494,6 +497,7 @@ Répéter:toujours
             process_user_code();
             draw_anim();
         }
+        requestAnimationFrame(main_loop);
     }
 
     function get_code_element(what, txt_after, base){
@@ -792,12 +796,12 @@ Répéter:toujours
         current_pan = e;
         current_pan.style.backgroundColor = "red";
     }
-/*
+
     document.getElementById("move_button").innerHTML = MOVE + "...";
     document.getElementById("turn_button").innerHTML = TURN + "...";
     document.getElementById("ifwall_button").innerHTML = IF_WALL + "...";
     document.getElementById("else_button").innerHTML = ELSE + "...";
-    document.getElementById("repeat_button").innerHTML = REPEAT + "...";*/
+    document.getElementById("repeat_button").innerHTML = REPEAT + "...";
     document.getElementById("run_button").innerHTML = RUN;
     var textareas = document.getElementsByTagName('textarea');
     var count = textareas.length;
@@ -814,14 +818,23 @@ Répéter:toujours
 
     function click_pause(){
         gameover = true;
-        clearInterval(intervalMainLoop);
+        //clearInterval(intervalMainLoop);
+    }
+
+    function initial_situation(){
+        frame++;
+        if(frame%INTERVAL_ANIM == 0)
+            draw_anim();
+        //if(frame < 100)
+        requestAnimationFrame(initial_situation);
     }
 
     initialize_run();
     frame = 0;
     img_obj.velocity = 1;
     var k = 0;
-    intervalMainLoop = setInterval(function(){ frame++;draw_anim(); }, INTERVAL);
+    //intervalMainLoop = setInterval(function(){ frame++;draw_anim(); }, INTERVAL);
+    requestAnimationFrame(initial_situation);
     img_obj.velocity = 0;
 </script>
 

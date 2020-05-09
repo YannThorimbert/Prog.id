@@ -1,41 +1,121 @@
 <!DOCTYPE HTML>
 <html>
 
+
+<!-- TODO:
+*traiter les erreurs
+*bug du ralentissement
+*niveaux
+*center elements de l'aide memoire
+ -->
+
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <style>
-    #canvas_pan{
+    body{
+        font-family: "Arial";
+          background-image: url(data:image/png;base64,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);
+          background-color: BlanchedAlmond;
+    }
+    .code_and_help{
+        /* background-color: red; */
         float:left;
         display: inline-block;
-        background-color: cyan;
-        padding : 5px;
-    }
-    #buttons_pan{
-        float:left;
-        display: inline-block;
-        background-color: cyan;
-        margin : 5px;
-    }
-    button{
-        margin:5px;
-    }
-    #code_pan{
-        float:left;
-        display: inline-block;
-        background-color: cyan;
         margin : 5px;
         min-width : 300px;
-        min-height : 200px;
+        min-height : 400px;
         padding: 8px;
         margin-bottom: 10px;
+        font-size:1.5em;
+        border-radius: 8px;
+        margin-top:0;
+        padding-top:0;
+    }
+    #canvas_and_run{
+        float:left;
+        display: block;
+        padding : 5px;
+        margin-top:20px;
+    }
+    #run_pan{
+        text-align: center;
+        margin : auto;
+    }
+    #code_pan, #help_pan{
+        /* float:left; */
+        /* display: block; */
+        /* margin : 5px; */
+        min-width : 300px;
+        min-height : 400px;
+        /* padding: 8px; */
+        /* margin-bottom: 10px; */
+        /* font-size:1.5em; */
+        border-radius: 8px;
+    }
+    #help_pan{
+        border:dashed 2px;
+    }
+    #code_pan{
+        font-size:1.2em;
+    }
+    .title_help{
+        font-weight: bold;
+        margin:15px;
+        font-size: 1.5em;
+        text-align: center;
+    }
+    button{
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        border-radius: 8px;
+    }
+    button:hover{
+        cursor:pointer;
+    }
+
+    #run_button, #pause_button{
+        color: white;
+        font-size: 1.5em;
+    }
+    #run_button{
+        background-color:green;
+        border-color:green;
+    }
+    #pause_button{
+        background-color:red;
+        border-color:red;
+    }
+    .help_button{
+        font-size: 1.1em;
+        display: block;
+        background-color: LightBlue;
+    }
+    .block_lines{
+        min-width : 100px;
+        min-height: 50px;
+        padding : 15px;
+        margin : 5px;
+        border-style : inset;
+        background-color : cyan;
+        border-radius: 5px;
     }
     input, select{
-        max-width:50px;
+        max-width:70px;
         margin:2px;
+        font-size: 1em;
     }
     .xremove{
         float:right;
         background-color:red;
+        padding:2px;
     }
     .codel{
         background-color:yellow;
@@ -44,96 +124,188 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        border-radius: 5px;
+        /* box-shadow: 5px 5px 10px; */
     }
     .group_repeat, .group_ifwall, .group_else{
         background-color:yellow;
         padding : 5px;
+        border-radius: 5px;
     }
-    #run_button{
-        background-color:green;
-        padding : 5px;
-        border-radius: 4px;
-        border-color:green;
-        color: white;
+    /* .input_repeat{
+        border:none;
+        box-shadow: none;
+    } */
+    canvas{
+        border-radius: 8px;
+        background-color: white;
     }
-    #pause_button{
-        background-color:red;
-        padding : 5px;
-        border-radius: 4px;
-        border-color:red;
-        color: white;
-    }
-    .block_lines{
-        min-width : 200px;
-        min-height: 50px;
-        padding : 5px;
-        margin : 5px;
-        border-style : inset;
-        background-color : cyan;
+    #divMouse{
+        background-color: rgba(255,255,255,0.8);
+		position: fixed;
+		border-radius: 5px;
+		box-shadow: 5px 5px 10px;
+		padding: 10px;
+        font-size: 1.5em;
+	}
+    .example_title{
+        color: red;
+        margin:20px;
     }
 
 </style>
 </head>
 
 <body>
-<div id="canvas_pan">
-    <canvas id="icanvas" width=640 height=500></canvas>
-</div>
-<div id="buttons_pan">
-<!--
-    <button id="move_button" onclick="click_move()">Move</button><br>
-    <button id="turn_button" onclick="click_turn()">Turn</button><br>
-    <button id="ifwall_button" onclick="click_ifwall()">If wall</button><br>
-    <button id="else_button" onclick="click_else()">Else</button><br>
-    <button id="repeat_button" onclick="click_repeat()">Repeat</button><br>
-    -->
-    <button id="run_button" onclick="click_run()">Run</button><br>
-    <button id="pause_button" onclick="click_pause()">Pause</button><br>
-</div>
-<!--<div id="code_pan" onClick="refresh_current_pan()">-->
-<textarea id="code_pan" name="subject" placeholder="Ecris ton code ici...">
-Répéter:toujours
-{
-    Si mur:
-    {
-        Tourner:90
-    }
-    Avancer:1
-}
-</textarea>
 
+<div id="divMouse" style="display: none;"></div>
+<div id="canvas_and_run">
+    <div id="canvas_pan">
+        <canvas id="icanvas" width=640 height=500></canvas>
+    </div>
+    <div id="run_pan">
+        <button id="run_button" onclick="click_run()"></button>
+        <button id="pause_button" onclick="click_pause()"></button>
+    </div>
 </div>
-
 
 <script>
-    var mapstr = "vhhhhhhhhhhhhhhhhhhhhv"+
-                 "v       v            v"+
-                 "v             *      v"+
-                 "v      o          v  v"+
-                 "v                    v"+
-                 "v    v          vv   v"+
-                 "v            *       v"+
-                 "v                    v"+
-                 "v  *     v           v"+
-                 "v                    v"+
-                 "v    v           v   v"+
-                 "v                    v"+
-                 "hhhhhhhhhhhhhhhhhhhhhh";
+    var mapstr = "wwwwwwwwwwwwwwwwwwwwww"+
+                 "w       w            w"+
+                 "w                    w"+
+                 "w      o   *****  w  w"+
+                 "w                    w"+
+                 "w    w wwwwwwww ww   w"+
+                 "w                    w"+
+                 "w                    w"+
+                 "w        w           w"+
+                 "w                    w"+
+                 "w    w           w   w"+
+                 "w                    w"+
+                 "wwwwwwwwwwwwwwwwwwwwww";
     var ny = 13;
     var nx = mapstr.length / ny;
     var INTERVAL = 40;
-    var intervalMainLoop = null;
-    var FOREVER = "toujours"
+    var INTERVAL_ANIM = 10;
+    var currentRequest = null;
+    var FOREVER = "toujours";
     var MOVE = "Avancer:";
-    var TXT_AFTER_MOVE = " cases"
+    var TXT_AFTER_MOVE = " cases";
     var TURN = "Tourner:";
-    var TXT_AFTER_TURN = ""
-    var REPEAT = "Répéter:"
-    var TXT_AFTER_REPEAT = " fois"
-    var IF_WALL = "Si mur:"
-    var ELSE = "Sinon:"
-    var GAME_OVER = "Perdu !"
-    var RUN = "Executer les ordres"
+    var TXT_AFTER_TURN = "";
+    var REPEAT = "Répéter:";
+    var TXT_AFTER_REPEAT = " fois";
+    var IF_WALL = "Si mur";
+    var ELSE = "Sinon:";
+    var GAME_OVER = "Perdu !";
+    var GAME_WON = "Gagné !";
+    var RUN = "Executer les ordres";
+    var PAUSE = "Stop"
+    var HELP_CODE = "Aide-mémoire";
+    var HELP_BLOCKS = "Instructions";
+    var TITLE_CODE = "Ton code";
+    var PLACEHOLDER = "Ecris ton code ici...";
+    var tabs4 = "&nbsp;".repeat(4);
+    var MODE = "code";
+    // var MODE = "blocks";
+
+    document.getElementById("run_button").innerHTML = RUN;
+    document.getElementById("pause_button").innerHTML = PAUSE;
+
+
+    var d = document.createElement("div");
+    d.className = "code_and_help";
+    document.body.appendChild(d);
+
+
+    var t = document.createElement("div");
+    t.className = "title_help";
+    t.innerHTML = TITLE_CODE;
+    d.appendChild(t)
+
+    //Create textarea or blocks area
+    if(MODE == "blocks"){
+        var e = document.createElement("div");
+        e.onclick = function (){refresh_current_pan();};
+    }
+    else if(MODE == "code"){
+        // var initial_code = "Avancer:8";
+        // var initial_code = "Répéter:toujours\n{\n    Si mur\n    {\n        Tourner:90\n    }\n    Avancer:1\n}"
+        var initial_code="";
+        var e = document.createElement("textarea");
+        e.placeholder = PLACEHOLDER;
+        if(initial_code.length > 0){
+            var t = document.createTextNode(initial_code);
+            e.appendChild(t);
+        }
+    }
+    e.id = "code_pan";
+    d.appendChild(e);
+
+
+    var d = document.createElement("div");
+    d.className = "code_and_help";
+    document.body.appendChild(d);
+
+    var t = document.createElement("div");
+    t.className = "title_help";
+    if(MODE=="code")
+        t.innerHTML = HELP_CODE;
+    else {
+        t.innerHTML = HELP_BLOCKS;
+    }
+    d.appendChild(t);
+
+    //create help area
+    var h = document.createElement("div");
+    h.id = "help_pan";
+    var buttons = [["move_button","click_move();", MOVE],
+                    ["turn_button","click_turn();", TURN],
+                    ["ifwall_button","click_ifwall();", IF_WALL],
+                    ["repeat_button","click_repeat();", REPEAT]];
+    var DESCR_MOVE = "Exemple pour avancer de 3 cases";
+    var DESCR_TURN = "Exemple pour tourner de 90 degrés";
+    var DESCR_IFWALL = "Exemple pour réagir face à un mur";
+    var DESCR_REPEAT = "Exemple pour répéter 4 fois des ordres";
+    var DESCR_REPEAT_FOREVER = "Pour répéter sans cesse";
+    var EXAMPLES_TXT = {"move_button":'<div class="example_title">' +
+                                        DESCR_MOVE + "</div>" + MOVE+" 3",
+                        "turn_button":'<div class="example_title">' +
+                                        DESCR_TURN + "</div>" + TURN+" 90",
+                        "ifwall_button":'<div class="example_title">' +
+                                        DESCR_IFWALL + "</div>" + IF_WALL +
+                                        "<br>{<br>" + tabs4 + "...<br>}",
+                        "repeat_button":'<div class="example_title">' +
+                                        DESCR_REPEAT + "</div>" + REPEAT + " 4" +
+                                        "<br>{<br>" + tabs4 + "...<br>}"+
+
+                                        '<div class="example_title">' +
+                                        DESCR_REPEAT_FOREVER + "</div>" + REPEAT + " toujours" +
+                                        "<br>{<br>" + tabs4 + "...<br>}"
+                        };
+    function attribute_help(item, index) {
+        var b = document.createElement("button");
+        b.className = "help_button";
+        b.id = item[0];
+        var txt = item[2].replace(":","");
+        if(MODE=="blocks")
+        {
+            b.onclick = function(){eval(item[1]);}
+        }
+        else{
+            // b.style.pointerEvents = "none";
+            var example = document.createElement("div");
+            b.setAttribute("onmouseover", "mouseOver(this)");
+            b.setAttribute("onmouseout", "mouseOut()");
+            b.appendChild(example);
+        }
+        b.innerHTML = txt;
+        h.appendChild(b);
+    }
+    buttons.forEach(attribute_help);
+    d.appendChild(h);
+
+
     var CELL_SIZE = 32;
     var VELOCITY; //must be a divider of cell size
     var icode = 0;
@@ -175,7 +347,10 @@ Répéter:toujours
     var walls_h = [];
     var walls_v = [];
     var coins = [];
+    var coins_took = 0;
+    var n_coins_initial;
     var current_pan = document.getElementById("code_pan");
+    var sound_coin = new Audio('coin.wav');
     initialize_run();
 
     function get_cell(){
@@ -221,24 +396,23 @@ Répéter:toujours
             return '';
         }
         else{
-            console.log("");
-            console.log("***");
-            console.log("instructions", instructions_repeat.slice());
-            console.log("icode_repeat before increment", icode_repeat.slice());
-            console.log("nrepeat", n_repeat.slice());
+            // console.log("");
+            // console.log("***");
+            // console.log("instructions", instructions_repeat.slice());
+            // console.log("icode_repeat before increment", icode_repeat.slice());
+            // console.log("nrepeat", n_repeat.slice());
             var level = instructions_repeat.length - 1; //index of current code
             var current_code = instructions_repeat[level].slice();
             icode_repeat[level] += 1;
-            console.log("level=",level, "i=", icode_repeat[level]);
+            // console.log("level=",level, "i=", icode_repeat[level]);
             if(icode_repeat[level] >= current_code.length){
-                console.log("============>");
+                // console.log("============>");
                 if(level == 0){ //end of program
                     img_obj.velocity = 0;
                     img_obj.current = 0
-                    console.log("END OF PROGRAM");
-                    console.log(img_obj.x);
+                    // console.log("END OF PROGRAM");
+                    // console.log(img_obj.x);
                     gameover = true;
-                    clearInterval(intervalMainLoop);
                     return '';
                 }
                 else{
@@ -247,7 +421,7 @@ Répéter:toujours
                         n_repeat.pop();
                         instructions_repeat.pop();
                         icode_repeat.pop();
-                        console.log("END OF LOOP");
+                        // console.log("END OF LOOP");
                         return '';
                     }
                     else{
@@ -257,9 +431,9 @@ Répéter:toujours
             }
         }
         var codeline = current_code[icode_repeat[level]];
-        console.log("CURRENT_CODE", current_code.slice(), icode_repeat.slice());
-        console.log("level and icode_repeat[level]", level, icode_repeat[level]);
-        console.log("       codeline", codeline);
+        // console.log("CURRENT_CODE", current_code.slice(), icode_repeat.slice());
+        // console.log("level and icode_repeat[level]", level, icode_repeat[level]);
+        // console.log("       codeline", codeline);
         ////////////////////////////////////////////////////////////////////////
         if(codeline[0].includes(MOVE)){
             set_char_goal_pos(codeline[1]);
@@ -271,18 +445,17 @@ Répéter:toujours
             if(codeline[0].includes(REPEAT)){
                 var n = codeline[1];
                 var instructions = codeline[2];
-                console.log("LOG REPEAT", instructions.slice());
+                // console.log("LOG REPEAT", instructions.slice());
                 n_repeat.push(n);
                 instructions_repeat.push(instructions);
                 icode_repeat.push(-1);
             }
             else if(codeline[0].includes(IF_WALL) && next_is_wall()){
                     var instructions = codeline[1];
-                    console.log("LOG IF WALL", instructions.slice(), char_touch_wall());
+                    // console.log("LOG IF WALL", instructions.slice(), char_touch_wall());
                     n_repeat.push(1); //"if" is just a loop that we take once
                     instructions_repeat.push(instructions);
                     icode_repeat.push(-1);
-                    console.log(img_obj.x);
             }
         }
         return codeline;
@@ -329,13 +502,13 @@ Répéter:toujours
 
     function check_conditions(){
         if(goal_x == img_obj.x && goal_y == img_obj.y){
-            console.log("Goal position ok");
+            // console.log("Goal position ok");
             goal_achieved = true;
             img_obj.velocity = 0;
         }
         else if(char_touch_wall()){
             console.log("Game over touch wall", get_cell());
-            context.font = "30px Arial";
+            context.font = "40px Arial";
             context.rect(0,0,canvas.width,canvas.height);
             context.fillStyle = "rgba(255, 255, 255, 0.5)";
             context.fill();
@@ -343,12 +516,24 @@ Répéter:toujours
             context.fillText(GAME_OVER, canvas.width/2, canvas.height/2);
             img_obj.velocity = 0
             gameover = true;
-            clearInterval(intervalMainLoop);
+        }
+        else if(char_touch_coin()){
+            remove_coin(get_cell());
+            if(coins_took == n_coins_initial){
+                gameover = true;
+                context.font = "40px Arial";
+                context.rect(0,0,canvas.width,canvas.height);
+                context.fillStyle = "rgba(255, 255, 255, 0.5)";
+                context.fill();
+                context.fillStyle = "green";
+                context.fillText(GAME_WON, canvas.width/2, canvas.height/2);
+            }
+
         }
     }
 
     function draw_anim() { // context is the canvas 2d context.
-        console.log("***draw***");
+        // console.log("***draw***");
         context.clearRect(0, 0, canvas.width, canvas.height);  // clear canvas
         draw_grid();
         context.drawImage(img_obj.source, img_obj.current * img_obj.width, 0,
@@ -399,6 +584,25 @@ Répéter:toujours
         */
     }
 
+    function pretty_walls(){
+        var new_map = "";
+        for(var i=0; i<mapstr.length; i++){
+            if (mapstr[i] == "w"){
+                var x = i%nx;
+                var y = parseInt(i/nx);
+                var i_bottom = nx * (y+1) + x;
+                var below_is_wall = "whv".includes(mapstr[i_bottom]);
+                if(i_bottom >= mapstr.length || below_is_wall)
+                    new_map += "v";
+                else
+                    new_map += "h";
+            }
+            else
+                new_map += mapstr[i];
+        }
+        mapstr = new_map;
+    }
+
     function draw_walls(){
         for (var i=0; i < walls_v.length; i++){
             var pix = [walls_v[i][0]*CELL_SIZE, walls_v[i][1]*CELL_SIZE];
@@ -428,6 +632,29 @@ Répéter:toujours
         return mapstr[i]=="*";
     }
 
+    function set_mapstr(coord, symbol){
+        var i = nx * coord[1] + coord[0];
+        mapstr[i] = symbol;
+    }
+
+    function remove_coin(coord){
+        for(var i=0;i<coins.length;i++){
+            if(coins[i][0] == coord[0] && coins[i][1] == coord[1]){
+                sound_coin.pause();
+                sound_coin.currentTime = 0;
+                sound_coin.play();
+                coins.splice(i,1);
+                set_mapstr(coord, " ");
+                coins_took ++;
+                break;
+            }
+        }
+    }
+
+    function char_touch_coin(){
+        return is_gold(get_cell());
+    }
+
     function char_touch_wall(){
         if(is_wall(get_cell())){ //topleft
             return true;
@@ -444,15 +671,24 @@ Répéter:toujours
     }
 
     function click_run(){
-        clearInterval(intervalMainLoop);
+        //clearInterval(intervalMainLoop);
         user_code = get_user_code();
         console.log("USER CODE", user_code);
         initialize_run();
         console.log("START MAIN LOOP");
-        intervalMainLoop = setInterval(function(){ main_loop(); }, INTERVAL);
+        //intervalMainLoop = setInterval(function(){ main_loop(); }, INTERVAL);
+        if(currentRequest != null){
+            cancelAnimationFrame(currentRequest);
+            currentRequest = null;
+        }
+        currentRequest = requestAnimationFrame(main_loop);
     }
 
     function initialize_run(){
+        if(currentRequest != null){
+            cancelAnimationFrame(currentRequest);
+            currentRequest = null;
+        }
         VELOCITY = 4; //must be a divider of cell size
         icode = 0;
         frame = 0;
@@ -466,6 +702,7 @@ Répéter:toujours
         walls_v = [];
         walls_h = [];
         coins = [];
+        pretty_walls();
         for(var i=0; i<mapstr.length; i++){
             var x = i%nx;
             var y = parseInt(i/nx);
@@ -485,6 +722,7 @@ Répéter:toujours
         img_obj.vy = 0;
         img_obj.velocity = VELOCITY
         set_char_orientation('right', img_obj);
+        n_coins_initial = coins.length;
     }
 
 
@@ -493,7 +731,9 @@ Répéter:toujours
         if(!gameover){
             process_user_code();
             draw_anim();
+            currentRequest = requestAnimationFrame(main_loop);
         }
+
     }
 
     function get_code_element(what, txt_after, base){
@@ -792,14 +1032,8 @@ Répéter:toujours
         current_pan = e;
         current_pan.style.backgroundColor = "red";
     }
-/*
-    document.getElementById("move_button").innerHTML = MOVE + "...";
-    document.getElementById("turn_button").innerHTML = TURN + "...";
-    document.getElementById("ifwall_button").innerHTML = IF_WALL + "...";
-    document.getElementById("else_button").innerHTML = ELSE + "...";
-    document.getElementById("repeat_button").innerHTML = REPEAT + "...";*/
-    document.getElementById("run_button").innerHTML = RUN;
-    var textareas = document.getElementsByTagName('textarea');
+
+    var textareas = document.getElementsByTagName('textarea') + document.getElementsByTagName('placeholder');
     var count = textareas.length;
     for(var i=0;i<count;i++){
         textareas[i].onkeydown = function(e){
@@ -812,20 +1046,92 @@ Répéter:toujours
         }
     }
 
+    $("textarea").keydown(function(e){
+    if(e.keyCode == 13){
+
+        // assuming 'this' is textarea
+
+        var cursorPos = this.selectionStart;
+        var curentLine = this.value.substr(0, this.selectionStart).split("\n").pop();
+        var indent = curentLine.match(/^\s*/)[0];
+        var value = this.value;
+        var textBefore = value.substring(0,  cursorPos );
+        var textAfter  = value.substring( cursorPos, value.length );
+
+        e.preventDefault(); // avoid creating a new line since we do it ourself
+        this.value = textBefore + "\n" + indent + textAfter;
+        setCaretPosition(this, cursorPos + indent.length + 1); // +1 is for the \n
+    }
+});
+
+function setCaretPosition(ctrl, pos)
+{
+
+    if(ctrl.setSelectionRange)
+    {
+        ctrl.focus();
+        ctrl.setSelectionRange(pos,pos);
+    }
+    else if (ctrl.createTextRange) {
+        var range = ctrl.createTextRange();
+        range.collapse(true);
+        range.moveEnd('character', pos);
+        range.moveStart('character', pos);
+        range.select();
+    }
+}
+
     function click_pause(){
         gameover = true;
-        clearInterval(intervalMainLoop);
+        //clearInterval(intervalMainLoop);
+    }
+
+    function initial_situation(){
+        frame++;
+        if(frame%INTERVAL_ANIM == 0){
+            draw_anim();
+        }
+        currentRequest = requestAnimationFrame(initial_situation);
+    }
+
+
+    var current_example_hover = "";
+    function mouseOver(e){
+        if(e != current_example_hover){
+            current_example_hover = e
+            var event = window.event;
+            var divMouse = document.getElementById('divMouse');
+            divMouse.style.left = event.clientX + 5 + "px";
+            divMouse.style.top = event.clientY + 5 + "px";
+            divMouse.style.display = 'block';
+            divMouse.innerHTML = EXAMPLES_TXT[e.id];
+        }
+    }
+
+    function mouseOut(){
+        current_example_hover = "";
+        document.getElementById('divMouse').style.display = "none";
+    }
+
+    document.onmousemove = handleMouseMove;
+    function handleMouseMove(event) {
+        if(current_example_hover != ""){
+            event = event || window.event; // IE-ism
+            var divMouse = document.getElementById('divMouse');
+            divMouse.style.left = event.clientX + 5 + "px";
+            divMouse.style.top = event.clientY + 5 + "px";
+        }
     }
 
     initialize_run();
     frame = 0;
     img_obj.velocity = 1;
     var k = 0;
-    intervalMainLoop = setInterval(function(){ frame++;draw_anim(); }, INTERVAL);
+    //intervalMainLoop = setInterval(function(){ frame++;draw_anim(); }, INTERVAL);
+    currentRequest = requestAnimationFrame(initial_situation);
     img_obj.velocity = 0;
 </script>
 
 </body>
 
 </html>
-
