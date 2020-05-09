@@ -520,6 +520,7 @@
         else if(char_touch_coin()){
             remove_coin(get_cell());
             if(coins_took == n_coins_initial){
+                requestAnimationFrame(draw_anim);
                 gameover = true;
                 context.font = "40px Arial";
                 context.rect(0,0,canvas.width,canvas.height);
