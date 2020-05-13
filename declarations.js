@@ -1,5 +1,5 @@
 
-var mapn = "1";
+
 var pattern = "MAP"+mapn;
 var mapstr = eval(pattern);
 var ny = eval(pattern + "_ny");
@@ -10,6 +10,7 @@ var INTERVAL = 40;
 var INTERVAL_ANIM = 10;
 var currentRequest = null;
 var FOREVER = "toujours";
+var RANDOM = "aléatoire";
 var MOVE = "Avancer:";
 var TXT_AFTER_MOVE = " cases";
 var TURN = "Tourner:";
@@ -21,20 +22,23 @@ var ELSE = "Sinon:";
 var GAME_OVER = "Perdu !";
 var GAME_WON = "Gagné !";
 var RUN = "Executer les ordres";
-var PAUSE = "Stop"
+var PAUSE = "Stop";
 var HELP_CODE = "Aide-mémoire";
 var HELP_BLOCKS = "Instructions";
 var TITLE_CODE = "Ton code";
 var PLACEHOLDER = "Ecris ton code ici...";
-var TITLES = {"error":"Erreur", "hint":"Indice"};
+var TITLES = {"error":"Erreur", "hint":"Consigne"};
 var UNKNOWN_INSTRUCTION = "Instruction non valide";
 var INVALID_NUMBER = "Nombre invalide";
 var INVALID_OPEN_BRACKET = "Accolade d'ouverture invalide ou manquante";
 var INVALID_CLOSE_BRACKET = "Accolade de fermeture invalide ou manquante";
+var EMPTY_LINE = "Ligne vide";
 var LINE_STR = "Ligne";
 var END_OF_PROGRAM = "Fin du code";
 var PROJECT = "⌂ Prog.ID";
-var LEVEL = "Choisir un niveau";
+var CHOOSE_LEVEL = "Choisir un niveau";
+var TXT_NEXT_LEVEL = "Passer au niveau suivant ?"
+var LEVEL = "Niveau";
 var tabs4 = "&nbsp;".repeat(4);
 var CELL_SIZE = 32;
 var VELOCITY; //must be a divider of cell size
@@ -79,6 +83,9 @@ var sound_coin = new Audio('coin.wav');
 var grid_img = new Image();
 var current_pan = document.getElementById("code_pan");
 var canvas = document.getElementById('icanvas');
-canvas.width = nx*CELL_SIZE;
-canvas.height = ny*CELL_SIZE;
-var context = canvas.getContext("2d");
+var context;
+if(canvas){
+    canvas.width = nx*CELL_SIZE;
+    canvas.height = ny*CELL_SIZE;
+    context = canvas.getContext("2d");
+}

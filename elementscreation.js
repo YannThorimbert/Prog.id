@@ -2,7 +2,7 @@ document.getElementById("run_button").innerHTML = RUN;
 document.getElementById("pause_button").innerHTML = PAUSE;
 
 document.getElementById("button_project").innerHTML = PROJECT;
-document.getElementById("button_level").innerHTML = LEVEL;
+document.getElementById("button_level").innerHTML = CHOOSE_LEVEL;
 
 var d = document.createElement("div");
 d.className = "code_and_help";
@@ -76,13 +76,18 @@ var buttons = [["move_button","click_move();", MOVE],
                 ["ifwall_button","click_ifwall();", IF_WALL]];
 var DESCR_MOVE = "Exemple pour avancer de 3 cases";
 var DESCR_TURN = "Exemple pour tourner de 90 degrés";
+var DESCR_TURN_RANDOM = "Pour choisir une direction au hasard";
 var DESCR_IFWALL = "Exemple pour réagir face à un mur";
 var DESCR_REPEAT = "Exemple pour répéter 4 fois des ordres";
 var DESCR_REPEAT_FOREVER = "Pour répéter sans cesse";
 var EXAMPLES_TXT = {"move_button":'<div class="example_title">' +
                                     DESCR_MOVE + "</div>" + MOVE.replace(":"," :")+" 3",
                     "turn_button":'<div class="example_title">' +
-                                    DESCR_TURN + "</div>" + TURN.replace(":"," :")+" 90",
+                                    DESCR_TURN + "</div>" + TURN.replace(":"," :")+" 90" +
+
+                                    '<div class="example_title">' +
+                                    DESCR_TURN_RANDOM + "</div>" + TURN.replace(":"," :") +
+                                        " " + RANDOM,
                     "ifwall_button":'<div class="example_title">' +
                                     DESCR_IFWALL + "</div>" + IF_WALL +
                                     "<br>{<br>" + tabs4 + "...<br>}",
@@ -91,7 +96,8 @@ var EXAMPLES_TXT = {"move_button":'<div class="example_title">' +
                                     "<br>{<br>" + tabs4 + "...<br>}"+
 
                                     '<div class="example_title">' +
-                                    DESCR_REPEAT_FOREVER + "</div>" + REPEAT.replace(":"," :") + " toujours"// +
+                                    DESCR_REPEAT_FOREVER + "</div>" +
+                                        REPEAT.replace(":"," :") + " " + FOREVER// +
                                     // "<br>{<br>" + tabs4 + "...<br>}"
                     };
 function attribute_help(item, index) {

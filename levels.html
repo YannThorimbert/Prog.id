@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+
+
+<!-- TODO:
+*niveaux
+#############################
+*si piece, si mur
+*sinon
+*pour i de 1 à 8: (+tard)
+#############################
+*page principale
+ -->
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+<div id="topmenu">
+    <button onclick="location.href='./project.html'" class="button_topmenu" id="button_project">Projet</button>
+    <button onclick="location.href='./levels.html'" class="button_topmenu" id="button_level">Niveau</button>
+</div>
+<script> var mapn = 1; </script>
+<script src="./maps.js"></script>
+<script src="./declarations.js"></script>
+<div id="levelmenu"></div>
+<script>
+    document.getElementById("button_project").innerHTML = PROJECT;
+    document.getElementById("button_level").innerHTML = CHOOSE_LEVEL;
+    var lmenu = document.getElementById("levelmenu");
+    for(var level=1; level<=map_level.length; level++){
+        lmenu.innerHTML += "<button class='level_button' onclick=level_click(this)>" +
+                            LEVEL + " " + level.toString() + "</button>"
+    }
+    function level_click(e){
+        var level = e.innerHTML.split(" ")[1].trim();
+        location.href='./play.html?mapn=' + level;
+    }
+</script>
+
+</body>
+
+</html>

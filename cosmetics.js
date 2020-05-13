@@ -29,6 +29,8 @@ if(e.keyCode == 13){
     /////////////////////////////////////////////////
     var code = document.getElementById("code_pan").value.split("\n");
     rebuild_line_numbers(code.length);
+    this.style.height = "5px";
+    this.style.height = (this.scrollHeight)+"px";
 }
 else if(e.keyCode == 8)
     var code = document.getElementById("code_pan").value.split("\n");
@@ -106,3 +108,13 @@ function quit_msg(e){
 
 if(hint)
     show_message(hint, "hint");
+
+
+function ask_next_level(text){
+    var e = document.createElement("div");
+    e.className = "centered "+type_;
+    e.innerHTML += "<div class='msg_title'>" + TXT_NEXT_LEVEL + "</div>";
+    e.innerHTML += "<div class='msg_txt'>" + text + "</div>"
+    e.innerHTML += "<button class='valid_msg' onclick='quit_msg(this)'> Ok </button>";
+    document.body.appendChild(e);
+}

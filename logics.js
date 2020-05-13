@@ -40,11 +40,6 @@ function process_user_code(){
         return '';
     }
     else{
-        // console.log("");
-        // console.log("***");
-        // console.log("instructions", instructions_repeat.slice());
-        // console.log("icode_repeat before increment", icode_repeat.slice());
-        // console.log("nrepeat", n_repeat.slice());
         var level = instructions_repeat.length - 1; //index of current code
         var current_code = instructions_repeat[level].slice();
         icode_repeat[level] += 1;
@@ -76,15 +71,15 @@ function process_user_code(){
         }
     }
     var codeline = current_code[icode_repeat[level]];
-    // console.log("CURRENT_CODE", current_code.slice(), icode_repeat.slice());
-    // console.log("level and icode_repeat[level]", level, icode_repeat[level]);
-    // console.log("       codeline", codeline);
     ////////////////////////////////////////////////////////////////////////
     if(codeline[0].includes(MOVE)){
         set_char_goal_pos(codeline[1]);
     }
     else if(codeline[0].includes(TURN)){
-        turn_char(codeline[1]);
+        if(codeline[1] == RANDOM)
+            turn_char_random_valid();
+        else
+            turn_char(parseInt(codeline[1]));
     }
     else{
         if(codeline[0].includes(REPEAT)){
@@ -107,23 +102,15 @@ function process_user_code(){
 }
 
 function next_is_wall(){
-    //var x = img_obj.x + img_obj.vx * img_obj.velocity + CELL_SIZE/2;
-    //var y = img_obj.y + img_obj.vy * img_obj.velocity + CELL_SIZE/2;
-    /*
-    if(goal_x === null || goal_y === null)
-        return false;
-    var x = goal_x + CELL_SIZE/2;
-    var y = goal_y + CELL_SIZE/2;
-    var coord = pix_to_cell(x,y);
-    */
     var coord = get_cell();
     coord[0] += img_obj.vx;
-    coord[1] += img_obj.vy
+    coord[1] += img_obj.vy;
     if(is_wall(coord)){ //topleft
         return true;
     }
     return false;
 }
+
 
 function set_char_goal_pos(argument){
     img_obj.velocity = VELOCITY;
@@ -143,6 +130,32 @@ function turn_char(argument){
     set_char_orientation(new_orientation);
     img_obj.velocity = 0;
     goal_achieved = true;
+}
+
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+}
+
+function turn_char_random_valid(){
+    var directions = shuffle(["left","right","up","down"]);
+    for(var i=0; i<directions.length; i++){
+        var direction = directions[i];
+        var coord = get_cell();
+        coord[0] += vel[direction][0];
+        coord[1] += vel[direction][1];
+        if(!is_wall(coord)){ //topleft
+            set_char_orientation(direction);
+            img_obj.velocity = 0;
+            goal_achieved = true;
+        }
+    }
 }
 
 function check_conditions(){
@@ -578,7 +591,7 @@ function check_code_errors(to_treat){
             }
         }
         else if(expression == TURN){
-            if(isNaN(sep[1])){
+            if(isNaN(sep[1]) && sep[1] != RANDOM){
                 show_error(INVALID_NUMBER, instruction, itxt);
                 return i;
             }
@@ -620,7 +633,10 @@ function check_code_errors(to_treat){
         }
     }//end for
     if(level!=0){
-        show_error(INVALID_CLOSE_BRACKET, accolade_line, itxt);
+        if(instruction == " " || instruction == "")
+            show_error(EMPTY_LINE, instruction, itxt);
+        else
+            show_error(INVALID_CLOSE_BRACKET, instruction, itxt);
         return i
     }
     return -1;
@@ -637,7 +653,7 @@ function transpile_user_code(collected, to_treat, code, level){
             code.push([MOVE, parseInt(sep[1])]);
         }
         else if(expression == TURN){
-            code.push([TURN, parseInt(sep[1])]);
+            code.push([TURN, sep[1]]);
         }
         else{
             var is_repeat = expression==REPEAT;
@@ -758,6 +774,7 @@ function final_situation(){
         if(coins_took == n_coins_initial){
             text = GAME_WON;
             color = "green";
+            show_message(hint, "hint");
         }
         else if(end_of_code){
             text = END_OF_PROGRAM;
