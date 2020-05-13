@@ -1,6 +1,9 @@
 document.getElementById("run_button").innerHTML = RUN;
 document.getElementById("pause_button").innerHTML = PAUSE;
 
+document.getElementById("button_project").innerHTML = PROJECT;
+document.getElementById("button_level").innerHTML = LEVEL;
+
 var d = document.createElement("div");
 d.className = "code_and_help";
 document.body.appendChild(d);
@@ -62,14 +65,15 @@ else {
     t.innerHTML = HELP_BLOCKS;
 }
 d.appendChild(t);
+// document.body.appendChild(t);
 
 //create help area
 var h = document.createElement("div");
 h.id = "help_pan";
 var buttons = [["move_button","click_move();", MOVE],
                 ["turn_button","click_turn();", TURN],
-                ["ifwall_button","click_ifwall();", IF_WALL],
-                ["repeat_button","click_repeat();", REPEAT]];
+                ["repeat_button","click_repeat();", REPEAT],
+                ["ifwall_button","click_ifwall();", IF_WALL]];
 var DESCR_MOVE = "Exemple pour avancer de 3 cases";
 var DESCR_TURN = "Exemple pour tourner de 90 degrés";
 var DESCR_IFWALL = "Exemple pour réagir face à un mur";

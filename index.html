@@ -3,16 +3,11 @@
 
 
 <!-- TODO:
-*traiter les erreurs
-    *erreurs d'accolades
-    *numero de ligne
 *niveaux
-*aide-memoire est en-dessous
 #############################
-*Avancer de 1, Tourner de 90°
 *si piece, si mur
 *sinon
-*pour i de 1 à 8:
+*pour i de 1 à 8: (+tard)
 #############################
 *page principale
  -->
@@ -25,12 +20,13 @@
 
 <body>
 <div id="topmenu">
-    <button onclick="location.href='./project.html'" class="button_topmenu">Projet</button>
-    <button onclick="location.href='./niveaux.html'" class="button_topmenu">Niveau</button>
+    <button onclick="location.href='./project.html'" class="button_topmenu" id="button_project">Projet</button>
+    <button onclick="location.href='./levels.html'" class="button_topmenu" id="button_level">Niveau</button>
 </div>
 
 <div id="divMouse" style="display: none;"></div>
 <div id="canvas_and_run">
+    <div class="title_canvas"> &nbsp </div>
     <div id="canvas_pan">
         <canvas id="icanvas" width=640 height=500></canvas>
     </div>

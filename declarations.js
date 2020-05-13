@@ -32,7 +32,9 @@ var INVALID_NUMBER = "Nombre invalide";
 var INVALID_OPEN_BRACKET = "Accolade d'ouverture invalide ou manquante";
 var INVALID_CLOSE_BRACKET = "Accolade de fermeture invalide ou manquante";
 var LINE_STR = "Ligne";
-var END_OF_PROGRAM = "Fin du code"
+var END_OF_PROGRAM = "Fin du code";
+var PROJECT = "⌂ Prog.ID";
+var LEVEL = "Choisir un niveau";
 var tabs4 = "&nbsp;".repeat(4);
 var CELL_SIZE = 32;
 var VELOCITY; //must be a divider of cell size
