@@ -1,16 +1,16 @@
 var MAP1 =
 "wwwwwwwwwwwwww"+
 "w            w"+
+"w     *      w"+
 "w            w"+
-"w            w"+
-"w o  * * **  w"+
-// "wo           w"+
+// "w o*        *w"+
+"wo           w"+
 "w            w"+
 "w            w"+
 "w            w"+
 "wwwwwwwwwwwwww";
 var MAP1_ny = 9;
-var MAP1_initial_code = "";
+var MAP1_initial_code = "Répéter:4\n{\n    Avancer:1\n    Tourner:90\n}";
 var MAP1_hint = 'Ecris le code "Avancer:1"';
 
 

@@ -27,7 +27,12 @@ var HELP_BLOCKS = "Instructions";
 var TITLE_CODE = "Ton code";
 var PLACEHOLDER = "Ecris ton code ici...";
 var TITLES = {"error":"Erreur", "hint":"Indice"};
-var ERROR_UNKNOWN = "Instruction non valide"
+var UNKNOWN_INSTRUCTION = "Instruction non valide";
+var INVALID_NUMBER = "Nombre invalide";
+var INVALID_OPEN_BRACKET = "Accolade d'ouverture invalide ou manquante";
+var INVALID_CLOSE_BRACKET = "Accolade de fermeture invalide ou manquante";
+var LINE_STR = "Ligne";
+var END_OF_PROGRAM = "Fin du code"
 var tabs4 = "&nbsp;".repeat(4);
 var CELL_SIZE = 32;
 var VELOCITY; //must be a divider of cell size

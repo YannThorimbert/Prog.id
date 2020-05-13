@@ -1,3 +1,5 @@
+
+
 var textareas = document.getElementsByTagName('textarea');// + document.getElementsByTagName('placeholder');
 var count = textareas.length;
 for(var i=0;i<count;i++){
@@ -13,20 +15,23 @@ for(var i=0;i<count;i++){
 
 $("textarea").keydown(function(e){
 if(e.keyCode == 13){
-
     // assuming 'this' is textarea
-
     var cursorPos = this.selectionStart;
     var curentLine = this.value.substr(0, this.selectionStart).split("\n").pop();
     var indent = curentLine.match(/^\s*/)[0];
     var value = this.value;
     var textBefore = value.substring(0,  cursorPos );
     var textAfter  = value.substring( cursorPos, value.length );
-
     e.preventDefault(); // avoid creating a new line since we do it ourself
     this.value = textBefore + "\n" + indent + textAfter;
     setCaretPosition(this, cursorPos + indent.length + 1); // +1 is for the \n
+    /////////////////////////////////////////////////
+    var code = document.getElementById("code_pan").value.split("\n");
+    rebuild_line_numbers(code.length);
 }
+else if(e.keyCode == 8)
+    var code = document.getElementById("code_pan").value.split("\n");
+    rebuild_line_numbers(code.length);
 });
 
 function setCaretPosition(ctrl, pos)
@@ -85,9 +90,16 @@ function show_message(text, type_){
     document.body.appendChild(e);
 }
 
+function show_error(err, line, n){
+    console.log(line,n);
+    show_message(err + "<br><br>" + LINE_STR + " " + n.toString() +
+                    ': " ' + line + ' "', "error");
+}
+
 function quit_msg(e){
     console.log(e.innerHTML);
     e.parentElement.parentElement.removeChild(e.parentElement);
+    document.getElementById("code_pan").focus();
 }
 
 if(hint)

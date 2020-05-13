@@ -27,6 +27,17 @@ body{
     text-align: center;
     margin : auto;
 }
+.surdiv{
+    /* background-color: red; */
+}
+#lines_number{
+    /* background-color: white; */
+    max-width: 50px;
+    float:left;
+    font-size: 1em;
+    padding:4px;
+    color : white;
+}
 #code_pan, #help_pan{
     /* float:left; */
     /* display: block; */
@@ -36,7 +47,7 @@ body{
     /* padding: 8px; */
     /* margin-bottom: 10px; */
     /* font-size:1.5em; */
-    border-radius: 8px;
+    border-radius : 8px;
 }
 #help_pan{
     border:dashed 2px;

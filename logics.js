@@ -57,6 +57,7 @@ function process_user_code(){
                 // console.log("END OF PROGRAM");
                 // console.log(img_obj.x);
                 gameover = true;
+                end_of_code = true;
                 return '';
             }
             else{
@@ -145,6 +146,12 @@ function turn_char(argument){
 }
 
 function check_conditions(){
+    if(char_touch_coin()){
+        remove_coin(get_cell());
+        if(coins_took == n_coins_initial){
+            gameover = true;
+        }
+    }
     if(goal_x == img_obj.x && goal_y == img_obj.y){
         // console.log("Goal position ok");
         goal_achieved = true;
@@ -155,13 +162,7 @@ function check_conditions(){
         img_obj.velocity = 0
         gameover = true;
     }
-    else if(char_touch_coin()){
-        remove_coin(get_cell());
-        if(coins_took == n_coins_initial){
-            gameover = true;
-        }
 
-    }
 }
 
 
@@ -316,6 +317,8 @@ function char_touch_wall(){
 function click_run(){
     //clearInterval(intervalMainLoop);
     user_code = get_user_code();
+    if(user_code == "error")
+        return;
     console.log("USER CODE", user_code);
     initialize_run();
     console.log("START MAIN LOOP");
@@ -326,12 +329,14 @@ function click_run(){
     currentRequest = requestAnimationFrame(main_loop);
 }
 
+var end_of_code = false;
 function initialize_run(){
     if(currentRequest != null){
         cancelAnimationFrame(currentRequest);
         currentRequest = null;
     }
     VELOCITY = 4; //must be a divider of cell size
+    end_of_code = false;
     icode = 0;
     frame = 0;
     goal_x = null;
@@ -559,28 +564,88 @@ function collect_user_code(e, code, level){
     }
 }
 
+function check_code_errors(to_treat){
+    var level = 0;
+    for(var i=0; i<to_treat.length; i++){
+        var sep = to_treat[i].split(":");
+        var instruction = to_treat[i].trim();
+        var expression = instruction.split(sep[1])[0];
+        var itxt = (i+1).toString();
+        if(expression == MOVE){
+            if(isNaN(sep[1])){
+                show_error(INVALID_NUMBER, instruction, itxt);
+                return i;
+            }
+        }
+        else if(expression == TURN){
+            if(isNaN(sep[1])){
+                show_error(INVALID_NUMBER, instruction, itxt);
+                return i;
+            }
+        }
+        else{
+            var is_repeat = expression==REPEAT;
+            if(is_repeat){
+                if(isNaN(sep[1])){
+                    show_error(INVALID_NUMBER, instruction, itxt);
+                    return i;
+                }
+            }
+            var is_ifwall = expression==IF_WALL;
+            if(is_repeat || is_ifwall){
+                var accolade_line = to_treat[i+1].trim();
+                if(accolade_line != "{"){
+                    line_txt = (i+2).toString();
+                    show_error(INVALID_OPEN_BRACKET, accolade_line, line_txt);
+                    return i+1;
+                }
+                else{
+                    level ++;
+                    i++;
+                }
+            }
+            else{
+                if(instruction=="}"){
+                    level --;
+                    if(level<0){
+                        show_error(INVALID_CLOSE_BRACKET, instruction, itxt);
+                        return i
+                    }
+                }
+                else{
+                    show_error(UNKNOWN_INSTRUCTION, instruction, itxt);
+                    return i
+                }
+            }
+        }
+    }//end for
+    if(level!=0){
+        show_error(INVALID_CLOSE_BRACKET, accolade_line, itxt);
+        return i
+    }
+    return -1;
+}
 
 function transpile_user_code(collected, to_treat, code, level){
     console.log("COLLECT", level);
     for(var i=0; i<to_treat.length; i++){
         var sep = to_treat[i].split(":");
-        console.log("TREAT", to_treat[i], sep);
-        var instruction = to_treat[i];
-        if(to_treat[i].includes(MOVE)){
-            console.log("   move");
+        var instruction = to_treat[i].trim();
+        var expression = instruction.split(sep[1])[0];
+        console.log("TREATING", instruction, sep, expression);
+        if(expression == MOVE){
             code.push([MOVE, parseInt(sep[1])]);
         }
-        else if(to_treat[i].includes(TURN)){
-            console.log("   turn");
+        else if(expression == TURN){
             code.push([TURN, parseInt(sep[1])]);
         }
         else{
-            var is_repeat = to_treat[i].includes(REPEAT);
-            var is_ifwall = to_treat[i].includes(IF_WALL);
+            var is_repeat = expression==REPEAT;
+            var is_ifwall = expression==IF_WALL;
             if(is_repeat || is_ifwall){
+                var accolade_line = to_treat[i+1].trim();
                 var inner_lines = get_inner_lines(to_treat, i);
-                console.log("   INNER LINES", inner_lines);
-                var inner_code = []
+                var inner_code = [];
                 transpile_user_code(collected, inner_lines, inner_code, level+1);
                 if(is_repeat){
                     var n = parseInt(sep[1]);
@@ -588,12 +653,7 @@ function transpile_user_code(collected, to_treat, code, level){
                 }
                 else if(is_ifwall)
                     code.push([IF_WALL, inner_code]);
-                else
-                    alert("ERREUR:", to_treat[i]);
                 i += inner_lines.length + 2;
-            }
-            else{
-                show_message(ERROR_UNKNOWN + "<br><br>" + '"'+instruction+'"', "error");
             }
         }
     }
@@ -608,16 +668,16 @@ function get_inner_lines(collected, icode){
         console.log("       inner", collected[i]);
         if(collected[i].startsWith('{'))
             counter_open++;
-        else if(collected[i].startsWith('}'))
+        else if(collected[i].startsWith('}')){
             counter_open--;
+        }
         if(counter_open < 0){
-            break;
+            return instructions;
         }
         else
             instructions.push(collected[i]);
         i++;
     }
-    return instructions;
 }
 
 function get_user_code(){
@@ -639,6 +699,9 @@ function get_user_code(){
     console.log("COLLECTED:");
     console.log(collected);
     var code = [];
+    if(check_code_errors(collected) != -1){
+        return "error";
+    }
     transpile_user_code(collected, collected, code, 0);
     return code;
 }
@@ -692,13 +755,17 @@ function final_situation(){
     // if(frame%INTERVAL_ANIM == 0){
         var text;
         var color;
-        if(coins_took!=n_coins_initial){
-            text = GAME_OVER;
-            color = "red";
-        }
-        else{
+        if(coins_took == n_coins_initial){
             text = GAME_WON;
             color = "green";
+        }
+        else if(end_of_code){
+            text = END_OF_PROGRAM;
+            color = "green";
+        }
+        else{
+            text = GAME_OVER;
+            color = "red";
         }
         context.font = "40px Arial";
         context.rect(0,0,canvas.width,canvas.height);

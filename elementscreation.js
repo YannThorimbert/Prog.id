@@ -11,6 +11,26 @@ t.className = "title_help";
 t.innerHTML = TITLE_CODE;
 d.appendChild(t)
 
+
+surdiv = document.createElement("div");
+surdiv.className = "surdiv";
+d.appendChild(surdiv);
+
+
+n = document.createElement("div");
+n.id = "lines_number";
+
+function rebuild_line_numbers(length){
+    var n = document.getElementById("lines_number");
+    n.innerHTML = "";
+    for(var i=1; i<=length; i++)
+        n.innerHTML += i.toString() + "<br>";
+}
+
+surdiv.appendChild(n);
+rebuild_line_numbers(initial_code.split("\n").length);
+
+
 //Create textarea or blocks area
 if(MODE == "blocks"){
     var e = document.createElement("div");
@@ -27,9 +47,8 @@ else if(MODE == "code"){
     }
 }
 e.id = "code_pan";
-d.appendChild(e);
-
 e.focus();
+surdiv.appendChild(e);
 
 var d = document.createElement("div");
 d.className = "code_and_help";
