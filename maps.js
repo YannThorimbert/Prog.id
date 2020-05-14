@@ -11,7 +11,8 @@ var MAP1 =
 "wwwwwwwwwwwwww";
 var MAP1_ny = 10;
 var MAP1_initial_code = "Avancer : 1";
-var MAP1_hint = 'Teste le code "Avancer : 1" et modifie-le pour attraper la pièce.';
+var MAP1_hint = 'Teste le code et modifie-le pour attraper la pièce.'+
+ '<br><br>Clique sur "Executer les ordres" pour tester le code.';
 
 var MAP2 =
 "wwwwwwwwwwwwww"+
@@ -62,7 +63,8 @@ var MAP4 =
 "w            w"+
 "wwwwwwwwwwwwww";
 var MAP4_ny = 16;
-var MAP4_initial_code = "";
+// var MAP4_initial_code = "";
+var MAP4_initial_code =  "Répéter:toujours\n{\n    Si mur\n    {\n        Tourner:180\n    }\n    Avancer:1\n}";
 var MAP4_hint = 'Attrape les pièces en écrivant le moins de code possible.'+
                  " Pense à utiliser l'instruction " + '"Répéter".';
 
@@ -149,4 +151,15 @@ var MAP6_hint = "Teste le code et modifie-le";
 // var MAP6_initial_code = "";
 // var MAP6_hint = '';
 
-var map_level = [1,2,3,4,5];
+var MAP1000 =
+"wwwwwwww"+
+"w      w"+
+"w o    w"+
+"w      w"+
+"w    * w"+
+"wwwwwwww";
+var MAP1000_ny = 6;
+var MAP1000_initial_code = "Avancer : 1\nTourner : 90\nAvancer : 1";
+var MAP1000_hint = '';
+
+var map_level = [1,2,3,4,5,6];

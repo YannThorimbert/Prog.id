@@ -755,6 +755,8 @@ function set_current_pan(e){
 
 function click_pause(){
     gameover = true;
+    initialize_run();
+    requestAnimationFrame(draw_anim);
     //clearInterval(intervalMainLoop);
 }
 
@@ -774,7 +776,9 @@ function final_situation(){
         if(coins_took == n_coins_initial){
             text = GAME_WON;
             color = "green";
-            show_message(hint, "hint");
+            if(map_level.includes(parseInt(mapn)+1)){
+                ask_next_level();
+            }
         }
         else if(end_of_code){
             text = END_OF_PROGRAM;
@@ -793,4 +797,9 @@ function final_situation(){
         context.fillText(text, canvas.width/2, canvas.height/2);
     // }
     // currentRequest = requestAnimationFrame(final_situation);
+}
+
+function next_level(){
+    var level = parseInt(mapn)+1
+    location.href='./play.html?mapn=' + level;
 }

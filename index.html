@@ -1,0 +1,136 @@
+<!DOCTYPE HTML>
+<html>
+
+
+<!-- TODO:
+*debug false sur site
+*contact !
+*niveaux
+*mettre un mini-code modifiable sur la page d'accueil
+#############################
+*si piece, si mur
+*sinon
+*pour i de 1 à 8: (+tard)
+#############################
+*page principale
+ -->
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+<div id="topmenu">
+    <button onclick="location.href='./index.html'" class="button_topmenu" id="button_project">Projet</button>
+    <button onclick="location.href='./levels.html'" class="button_topmenu" id="button_level">Niveau</button>
+</div>
+<script>
+var mapn = 1;
+var DEBUG = true;
+var MODE = "code";
+</script>
+<script src="./maps.js"></script>
+<script src="./declarations.js"></script>
+<script>
+
+document.getElementById("button_project").innerHTML = PROJECT;
+document.getElementById("button_level").innerHTML = CHOOSE_LEVEL;
+</script>
+<div id="levelmenu"></div>
+    <div class="text_content">
+        Prog.ID est un projet d'introduction ludique à la programmation.<br><br>
+        Le but de Prog.ID est développer l'esprit algorithmique des débutants en programmation, ainsi que de les sensibiliser à
+        l'utilisation d'une syntaxe rigoureuse, comme dans les langages de programmation les plus utilisés.<br><br>
+        Un langage de programmation clair et simple, utilisable par des enfants, a été spécialement développé pour l'occasion.<br><br>
+    </div>
+    <button onclick="location.href='./levels.html'" class="button_index" id="button_project">Commencer</button>
+    <!-- <button onclick="location.href='./levels.html'" class="level_button" id="button_level">Jouer</button> -->
+</div>
+<!-- <div id="teaser">
+    <button id="run_button" onclick="click_run()"></button>
+    <button id="pause_button" onclick="click_pause()"></button>
+    <div id="caca">
+        <canvas id="icanvas" width=640 height=500></canvas>
+    </div>
+</div> -->
+<!-- <script src="./maps.js"></script>
+<script src="./declarations.js"></script>
+<script src="./elementscreation.js"></script>
+<script src="./logics.js"></script>
+<script src="./cosmetics.js"></script>
+<script>
+    document.getElementById("help_pan").style.display="none";
+    document.getElementById("title_help").style.display="none";
+    document.getElementById("title_code").style.display="none";
+    document.getElementById("lines_number").style.display = "none";
+    var rb = document.getElementById("run_button");
+    rb.style.fontSize = "small";
+    rb.style.padding = "8px";
+    // rb.style.display = "block";
+    rb.parentElement.removeChild(rb);
+    var pb = document.getElementById("pause_button");
+    pb.style.display = "none";
+    var cp = document.getElementById("code_pan");
+    cp.style.fontSize = "small";
+    cp.style.minHeight = "50px";
+    cp.style.minWidth = "200px";
+    cp.style.margin = "auto";
+    cp.style.display = "block";
+    cp.parentElement.removeChild(cp);
+    var cr = document.getElementById("teaser");
+    cr.style.textAlign = "center";
+    cr.style.margin = "auto";
+    cr.style.float = "none";
+    // <teaser>
+    //     <e2> red
+    //         <caca>
+    //             <icanvas>
+    //         </caca>
+    //         <e> cyan
+    //             <code_pan>
+    //             <run_button>
+    //         </e>
+    //     </e2>
+    // </teaser>
+    var e = document.createElement("span"); //contains code and run button
+    e.style.display = "block";
+    e.appendChild(cp);
+    e.appendChild(rb);
+    e.style.backgroundColor = "cyan";
+    e.style.margin = "100px";
+    e.style.padding = "100px";
+    ////////////////////////////////////////////////////////////////////////////
+    var e2 = document.createElement("div"); //contains canvas and e
+    var ic = document.getElementById("icanvas");
+    // ic.style.display = "block";
+    var caca = document.getElementById("caca");
+    caca.style.float = "left";
+    caca.style.backgroundColor = "black";
+    caca.style.padding = "20px";
+    caca.style.margin = "20px";
+    caca.style.display = "block";
+    // caca.parentElement.removeChild(caca);
+    // ic.parentElement.removeChild(ic);
+    e2.appendChild(caca);
+    e2.appendChild(e);
+    e2.style.backgroundColor = "red";
+    e2.style.padding = "50px";
+    cr.appendChild(e2);
+    ///////////////////////////////////////////////////////
+    initialize_run();
+    frame = 0;
+    img_obj.velocity = 1;
+    currentRequest = requestAnimationFrame(initial_situation);
+    img_obj.velocity = 0;
+</script> -->
+
+<div class="footer">
+    (C) 2020 Yann Thorimbert<br>
+    Contact : <a href="mailto:yann.thorimbert@gmail.com">Yann.Thorimbert@gmail.com</a>
+</div>
+
+</body>
+
+</html>

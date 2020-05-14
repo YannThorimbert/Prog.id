@@ -11,6 +11,7 @@ document.body.appendChild(d);
 
 var t = document.createElement("div");
 t.className = "title_help";
+t.id = "title_code";
 t.innerHTML = TITLE_CODE;
 d.appendChild(t)
 
@@ -40,8 +41,6 @@ if(MODE == "blocks"){
     e.onclick = function (){refresh_current_pan();};
 }
 else if(MODE == "code"){
-    // var initial_code = "Répéter:toujours\n{\n    Si mur\n    {\n        Tourner:90\n    }\n    Avancer:1\n}"
-    // var initial_code="";
     var e = document.createElement("textarea");
     e.placeholder = PLACEHOLDER;
     if(initial_code.length > 0){
@@ -59,6 +58,7 @@ document.body.appendChild(d);
 
 var t = document.createElement("div");
 t.className = "title_help";
+t.id = "title_help";
 if(MODE=="code")
     t.innerHTML = HELP_CODE;
 else {

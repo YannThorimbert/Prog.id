@@ -20,7 +20,7 @@
 
 <body>
 <div id="topmenu">
-    <button onclick="location.href='./project.html'" class="button_topmenu" id="button_project">Projet</button>
+    <button onclick="location.href='./index.html'" class="button_topmenu" id="button_project">Projet</button>
     <button onclick="location.href='./levels.html'" class="button_topmenu" id="button_level">Niveau</button>
 </div>
 
@@ -52,7 +52,7 @@
     	}
     	return params;
     };
-    var DEBUG = true;
+    var DEBUG = false;
     var MODE = "code";
     params = get_params(window.location.href);
     var mapn = params.mapn;
@@ -70,7 +70,10 @@
     currentRequest = requestAnimationFrame(initial_situation);
     img_obj.velocity = 0;
 </script>
-
+<div class="footer">
+    (C) 2020 Yann Thorimbert<br>
+    Contact : <a href="mailto:yann.thorimbert@gmail.com">Yann.Thorimbert@gmail.com</a>
+</div>
 </body>
 
 </html>
