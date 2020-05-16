@@ -25,8 +25,8 @@
     <button onclick="location.href='./tutos.html'" class="button_topmenu" id="button_tuto">Exemples</button>
     <button onclick="location.href='./creation.html'" class="button_topmenu" id="button_creation">Création</button>
 </div>
-<script> var mapn = 1; </script>
-<script src="./maps.js"></script>
+<script> var mapn = "TUTO1"; </script>
+<script src="./tutos.js"></script>
 <script src="./declarations.js"></script>
 <div id="levelmenu"></div>
 <script>
@@ -35,13 +35,14 @@
     document.getElementById("button_tuto").innerHTML = EXAMPLES;
     document.getElementById("button_creation").innerHTML = CREATION;
     var lmenu = document.getElementById("levelmenu");
-    for(var level=1; level<=map_level.length; level++){
-        lmenu.innerHTML += "<button class='level_button' onclick=level_click(this)>" +
-                            LEVEL + " " + level.toString() + "</button>"
+    for(var level=1; level<=ntutos; level++){
+        var title = eval("TUTO"+level.toString()+"_title");
+        lmenu.innerHTML += "<button class='level_button' onclick=level_click(" +
+                            level.toString() + ")>" +
+                             title + "</button>"
     }
-    function level_click(e){
-        var level = e.innerHTML.split(" ")[1].trim();
-        location.href='./play.html?mapn=' + level;
+    function level_click(number){
+        location.href='./play.html?mapn=TUTO'+number;
     }
 </script>
 <div class="footer">

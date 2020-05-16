@@ -1,11 +1,19 @@
 
-
-var pattern = "MAP"+mapn;
+var pattern;
+if(mapn.toString().includes("TUTO"))
+    pattern = mapn;
+else if(mapn == "EMPTY")
+    pattern = "EMPTY";
+else
+    pattern = "MAP"+mapn;
+console.log("mapn",mapn);
+console.log("pattern",pattern);
 var mapstr = eval(pattern);
 var ny = eval(pattern + "_ny");
 var nx = mapstr.length / ny;
 var initial_code = eval(pattern + "_initial_code");
 var hint = eval(pattern + "_hint");
+var correction = eval(pattern + "_correction");
 var currentRequest = null;
 const INTERVAL = 40;
 const INTERVAL_ANIM = 10;
@@ -31,9 +39,9 @@ const HELP_CODE = "Aide-mémoire";
 const HELP_BLOCKS = "Instructions";
 const TITLE_CODE = "Ton code";
 const PLACEHOLDER = "Ecris ton code ici...";
-const TITLES = {"error":"Erreur", "hint":"Consigne", "info":""};
 const UNKNOWN_INSTRUCTION = "Instruction non valide";
 const INVALID_NUMBER = "Nombre invalide";
+const INVALID_ANGLE = "Angle invalide. Les angles valides sont : 90, 180, 270, "+RANDOM+"."
 const INVALID_OPEN_BRACKET = "Accolade d'ouverture invalide ou manquante";
 const INVALID_CLOSE_BRACKET = "Accolade de fermeture invalide ou manquante";
 const INVALID_ELSE = 'La ligne contient un "' + ELSE + '" qui ne se rapport à aucun "' + IF + '"';
@@ -43,9 +51,14 @@ const INFO_CAPS = "Attention, les ordres ne doivent pas contenir majuscules."
 const END_OF_PROGRAM = "Fin du code";
 const PROJECT = "⌂ Prog.ID";
 const CHOOSE_LEVEL = "Choisir un niveau";
+const EXAMPLES = "Exemples";
+const CREATION = "Création";
+const CORRECTION = "Afficher une solution";
+const MORE = "Pour aller plus loin...";
+const TITLES = {"error":"Erreur", "hint":"Consigne", "info":MORE};
 const TXT_NEXT_LEVEL = "Passer au niveau suivant ?";
 const YES = "Oui";
-const NO = "non";
+const NO = "Non";
 const LEVEL = "Niveau";
 const tabs4 = "&nbsp;".repeat(4);
 const CELL_SIZE = 32;
@@ -101,5 +114,5 @@ if(canvas){
     canvas.height = ny*CELL_SIZE;
     context = canvas.getContext("2d");
 }
-var show_path = true;
+var show_path = false;
 var path = [];

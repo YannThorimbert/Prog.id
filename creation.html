@@ -38,17 +38,21 @@
     </div>
     <div id="options_pan">
         <label class="switch">
-          <input type="checkbox" id="path_ui" onclick="show_path=!show_path">
-          <span class="slider round"></span>
-      </label>
-      <button class="disabled">Montrer le chemin</button>
+            <input type="checkbox" id="path_ui" onclick="show_path=!show_path">
+            <span class="slider round"></span>
+        </label>
+        <button class="disabled">Montrer le chemin</button>
+        <div>
+            <button id="uchar" class="user_modif" onclick="refresh_umod(this)">
+                Position initiale</button>
+            <button id="uwall" class="user_modif" onclick="refresh_umod(this)">
+                Murs</button>
+            <button id="ucoin" class="user_modif" onclick="refresh_umod(this)">
+                Pièces</button>
+        </div>
     </div>
 </div>
 <script>
-    /**
-     * Get the URL parameters
-     * source: https://css-tricks.com/snippets/javascript/get-url-variables/
-     */
     function get_params (url) {
     	var params = {};
     	var parser = document.createElement('a');
@@ -64,7 +68,7 @@
     var DEBUG = true;
     var MODE = "code";
     params = get_params(window.location.href);
-    var mapn = params.mapn;
+    var mapn = "EMPTY";
     // var MODE = "blocks";
 </script>
 <script src="./maps.js"></script>
@@ -74,6 +78,57 @@
 <script src="./logics.js"></script>
 <script src="./cosmetics.js"></script>
 <script>
+    var user_modif = "";
+    var ubuttons = ["uchar", "uwall", "ucoin"];
+    function refresh_umod(e){
+        user_modif = e.id;
+        for(var i=0; i<ubuttons.length; i++){
+            var b = document.getElementById(ubuttons[i]);
+            b.style.color = "white";
+            b.style.fontSize = "1em";
+        }
+        e.style.color = "yellow";
+        e.style.fontSize = "1.5em";
+    }
+    replaceInStr = function(s, index, replacement) {
+    return s.substr(0, index) + replacement + s.substr(index + replacement.length);
+    }
+    var canvas = document.getElementById("icanvas");
+    function click_canvas(event){
+        var x;
+        var y;
+        if (event.pageX || event.pageY) {
+          x = event.pageX;
+          y = event.pageY;
+        }
+        else {
+            var bodyX = document.body.scrollLeft;
+            var bodyY = document.body.scrollTop;
+            if(isNaN(bodyX))
+                bodyX = 0;
+            if(isNaN(bodyY))
+                bodyY = 0;
+          x = event.clientX + bodyX + document.documentElement.scrollLeft;
+          y = event.clientY + bodyY + document.documentElement.scrollTop;
+        }
+        x -= canvas.offsetLeft;
+        y -= canvas.offsetTop;
+        coord = pix_to_cell(x,y);
+        ///////////////////////////////////////////////////////////////////////
+        var i = nx * coord[1] + coord[0];
+        if(user_modif=="uwall")
+            mapstr = replaceInStr(mapstr, i,"w");
+        else if(user_modif=="ucoin")
+            mapstr = replaceInStr(mapstr, i,"*");
+        gameover = true;
+        initialize_run();
+        for(var i=0; i<coins.length; i++)
+        {
+            coins[i][2] = 0;
+        }
+        requestAnimationFrame(draw_anim);
+    }
+    canvas.onmouseup = click_canvas;
     var c = document.getElementById("correction");
     if(mapn.includes("TUTO"))
         c.innerHTML = MORE;

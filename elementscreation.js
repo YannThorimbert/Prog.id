@@ -3,6 +3,8 @@ document.getElementById("restart_button").innerHTML = RESTART;
 
 document.getElementById("button_project").innerHTML = PROJECT;
 document.getElementById("button_level").innerHTML = CHOOSE_LEVEL;
+document.getElementById("button_tuto").innerHTML = EXAMPLES;
+document.getElementById("button_creation").innerHTML = CREATION;
 
 var d = document.createElement("div");
 d.className = "code_and_help";
@@ -45,11 +47,17 @@ else if(MODE == "code"){
     e.placeholder = PLACEHOLDER;
     if(initial_code.length > 0){
         var t = document.createTextNode(initial_code);
+        t.id = "actual_code";
         e.appendChild(t);
     }
 }
 e.id = "code_pan";
 e.focus();
+surdiv.appendChild(e);
+
+e = document.createElement("div");
+e.innerHTML = "<button id='correction' onclick='show_correction()'>" + CORRECTION + "</div>";
+e.style.display = "flex";
 surdiv.appendChild(e);
 
 var d = document.createElement("div");
@@ -77,7 +85,7 @@ var buttons = [["move_button","click_move();", MOVE],
                 ["ifcoin_button","click_ifcoin();", IF_COIN]
                 ];
 var DESCR_MOVE = "Exemple pour avancer de 3 cases";
-var DESCR_TURN = "Exemple pour tourner de 90 degrés";
+var DESCR_TURN = "Exemple pour tourner de 90 degrés dans le sens horaire";
 var DESCR_TURN_RANDOM = "Pour choisir une direction au hasard";
 var DESCR_IFWALL = "Exemple pour réagir avant un mur";
 var DESCR_IFCOIN = "Exemple pour réagir avant une pièce";

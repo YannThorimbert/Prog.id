@@ -36,6 +36,7 @@ body{
 }
 .surdiv{
     /* background-color: red; */
+    /* padding:auto; */
 }
 #lines_number{
     /* background-color: white; */
@@ -202,6 +203,9 @@ canvas{
 .hint{
     background-color: blue;
 }
+.info{
+    background-color: blue;
+}
 .msg_title{
     font-size: 2.2em;
     color: yellow;
@@ -300,7 +304,7 @@ canvas{
 }
 
 input:checked + .slider {
-  background-color: green;
+  background-color: #4CAF50;
 }
 
 input:focus + .slider {
@@ -311,4 +315,12 @@ input:checked + .slider:before {
   -webkit-transform: translateX(26px);
   -ms-transform: translateX(26px);
   transform: translateX(26px);
+}
+
+#correction{
+    margin:auto;
+}
+
+.user_modif{
+    background-color: blue;
 }

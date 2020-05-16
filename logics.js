@@ -92,17 +92,20 @@ function process_user_code(){
         }
         else{
             var instructions;
-            var if_true;
+            var if_true = false;
+            ///////////////////////////////////////////////////////////////////
             if(codeline[0] == ELSE){
-                if_true = codeline[1] == IF_WALL && next_is_wall();
-                if_true = if_true || codeline[1] == IF_COIN && next_is_coin();
-                if_true = !if_true;
+                if(codeline[1] == WALL)
+                    if_true = !next_is_wall();
+                else if(codeline[1] == COIN)
+                    if_true = !next_is_coin();
                 instructions = codeline[2];
             }
             else if(codeline[0] == IF_WALL || codeline[0] == IF_COIN){
-                // console.log("***",codeline, codeline[0] == IF_COIN && next_is_coin());
-                if_true = codeline[0] == IF_WALL && next_is_wall();
-                if_true = if_true || codeline[0] == IF_COIN && next_is_coin();
+                if(codeline[0] == IF_WALL)
+                    if_true = next_is_wall();
+                else if(codeline[0] == IF_COIN)
+                    if_true = next_is_coin();
                 instructions = codeline[1];
             }
             if(if_true){
@@ -280,7 +283,7 @@ function pretty_walls(){
     var new_map = "";
     console.log(mapstr.length, nx, ny);
     for(var i=0; i<mapstr.length; i++){
-        if (mapstr[i] == "w"){
+        if (mapstr[i] == "w" || mapstr[i] == "h"){
             var x = i%nx;
             var y = parseInt(i/nx);
             var i_bottom = nx * (y+1) + x;
@@ -651,15 +654,20 @@ function check_code_errors(to_treat){
         var expression = parsed[2];
         var itxt = (i+1).toString();
         if(expression == MOVE){
-            if(isNaN(sep[1].trim())){
+            var arg = sep[1].trim();
+            if(isNaN(arg)){
                 show_error(INVALID_NUMBER, instruction, itxt);
                 return i;
             }
         }
         else if(expression == TURN){
-            if(isNaN(sep[1]) && sep[1] != RANDOM){
+            var arg = sep[1].trim();
+            if(isNaN(arg) && arg != RANDOM){
                 show_error(INVALID_NUMBER, instruction, itxt);
                 return i;
+            }
+            else if(!["90","180","270",RANDOM].includes(arg)){
+                show_error(INVALID_ANGLE, instruction, itxt);
             }
         }
         else{
@@ -896,4 +904,13 @@ function final_situation(){
 function next_level(){
     var level = parseInt(mapn)+1
     location.href='./play.html?mapn=' + level;
+}
+
+function show_correction(){
+    if(mapn.includes("TUTO")){
+        if(correction != "")
+            show_message(correction, "info");
+    }
+    else
+        document.getElementById("code_pan").value = correction;
 }
