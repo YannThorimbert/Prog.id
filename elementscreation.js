@@ -1,5 +1,5 @@
 document.getElementById("run_button").innerHTML = RUN;
-document.getElementById("pause_button").innerHTML = PAUSE;
+document.getElementById("restart_button").innerHTML = RESTART;
 
 document.getElementById("button_project").innerHTML = PROJECT;
 document.getElementById("button_level").innerHTML = CHOOSE_LEVEL;
@@ -73,11 +73,14 @@ h.id = "help_pan";
 var buttons = [["move_button","click_move();", MOVE],
                 ["turn_button","click_turn();", TURN],
                 ["repeat_button","click_repeat();", REPEAT],
-                ["ifwall_button","click_ifwall();", IF_WALL]];
+                ["ifwall_button","click_ifwall();", IF_WALL],
+                ["ifcoin_button","click_ifcoin();", IF_COIN]
+                ];
 var DESCR_MOVE = "Exemple pour avancer de 3 cases";
 var DESCR_TURN = "Exemple pour tourner de 90 degrés";
 var DESCR_TURN_RANDOM = "Pour choisir une direction au hasard";
-var DESCR_IFWALL = "Exemple pour réagir face à un mur";
+var DESCR_IFWALL = "Exemple pour réagir avant un mur";
+var DESCR_IFCOIN = "Exemple pour réagir avant une pièce";
 var DESCR_REPEAT = "Exemple pour répéter 4 fois des ordres";
 var DESCR_REPEAT_FOREVER = "Pour répéter sans cesse";
 var EXAMPLES_TXT = {"move_button":'<div class="example_title">' +
@@ -90,6 +93,9 @@ var EXAMPLES_TXT = {"move_button":'<div class="example_title">' +
                                         " " + RANDOM,
                     "ifwall_button":'<div class="example_title">' +
                                     DESCR_IFWALL + "</div>" + IF_WALL +
+                                    "<br>{<br>" + tabs4 + "...<br>}",
+                    "ifcoin_button":'<div class="example_title">' +
+                                    DESCR_IFCOIN + "</div>" + IF_COIN +
                                     "<br>{<br>" + tabs4 + "...<br>}",
                     "repeat_button":'<div class="example_title">' +
                                     DESCR_REPEAT + "</div>" + REPEAT.replace(":"," :") + " 4" +

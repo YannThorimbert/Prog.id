@@ -32,7 +32,14 @@
     </div>
     <div id="run_pan">
         <button id="run_button" onclick="click_run()"></button>
-        <button id="pause_button" onclick="click_pause()"></button>
+        <button id="restart_button" onclick="click_restart()"></button>
+    </div>
+    <div id="options_pan">
+        <label class="switch">
+          <input type="checkbox" id="path_ui" onclick="show_path=!show_path" checked>
+          <span class="slider round"></span>
+      </label>
+      <button class="disabled">Montrer le chemin</button>
     </div>
 </div>
 <script>
@@ -52,7 +59,7 @@
     	}
     	return params;
     };
-    var DEBUG = false;
+    var DEBUG = true;
     var MODE = "code";
     params = get_params(window.location.href);
     var mapn = params.mapn;

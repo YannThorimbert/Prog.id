@@ -3,16 +3,15 @@
 
 
 <!-- TODO:
+*si pas d'instruction dans la ligne processee, direct passe a la suivant sinon ralentit
+*angles
+*utiliser const
 *debug false sur site
-*contact !
 *niveaux
-*mettre un mini-code modifiable sur la page d'accueil
+*creation de niveaux
 #############################
-*si piece, si mur
-*sinon
+*mettre un mini-code modifiable sur la page d'accueil (plutot une video)
 *pour i de 1 à 8: (+tard)
-#############################
-*page principale
  -->
 
 <head>
@@ -50,7 +49,7 @@ document.getElementById("button_level").innerHTML = CHOOSE_LEVEL;
 </div>
 <!-- <div id="teaser">
     <button id="run_button" onclick="click_run()"></button>
-    <button id="pause_button" onclick="click_pause()"></button>
+    <button id="restart_button" onclick="click_restart()"></button>
     <div id="caca">
         <canvas id="icanvas" width=640 height=500></canvas>
     </div>
@@ -70,7 +69,7 @@ document.getElementById("button_level").innerHTML = CHOOSE_LEVEL;
     rb.style.padding = "8px";
     // rb.style.display = "block";
     rb.parentElement.removeChild(rb);
-    var pb = document.getElementById("pause_button");
+    var pb = document.getElementById("restart_button");
     pb.style.display = "none";
     var cp = document.getElementById("code_pan");
     cp.style.fontSize = "small";

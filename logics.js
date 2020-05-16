@@ -90,12 +90,26 @@ function process_user_code(){
             instructions_repeat.push(instructions);
             icode_repeat.push(-1);
         }
-        else if(codeline[0].includes(IF_WALL) && next_is_wall()){
-                var instructions = codeline[1];
-                // console.log("LOG IF WALL", instructions.slice(), char_touch_wall());
-                n_repeat.push(1); //"if" is just a loop that we take once
+        else{
+            var instructions;
+            var if_true;
+            if(codeline[0] == ELSE){
+                if_true = codeline[1] == IF_WALL && next_is_wall();
+                if_true = if_true || codeline[1] == IF_COIN && next_is_coin();
+                if_true = !if_true;
+                instructions = codeline[2];
+            }
+            else if(codeline[0] == IF_WALL || codeline[0] == IF_COIN){
+                // console.log("***",codeline, codeline[0] == IF_COIN && next_is_coin());
+                if_true = codeline[0] == IF_WALL && next_is_wall();
+                if_true = if_true || codeline[0] == IF_COIN && next_is_coin();
+                instructions = codeline[1];
+            }
+            if(if_true){
+                n_repeat.push(1); //an "if" is just a loop that one takes once
                 instructions_repeat.push(instructions);
                 icode_repeat.push(-1);
+            }
         }
     }
     return codeline;
@@ -180,25 +194,52 @@ function check_conditions(){
 
 
 function draw_anim() { // context is the canvas 2d context.
-    // console.log("***draw***");
     context.clearRect(0, 0, canvas.width, canvas.height);  // clear canvas
+    if(show_path)
+        draw_path();
     if(DEBUG)
         draw_grid();
     else
         context.drawImage(grid_img, 0, 0);
+    draw_walls();
+    draw_flag();
     context.drawImage(img_obj.source, img_obj.current * img_obj.width, 0,
                           img_obj.width, img_obj.height,
                           img_obj.x, img_obj.y, img_obj.width, img_obj.height);
-    draw_walls();
     draw_gold();
+}
+
+function update_char_pos(){
     if(img_obj.velocity == 0){
         img_obj.current = 0;
     }
     else{
-        img_obj.current = (img_obj.current + 1) % img_obj.total_frames;
+        if(frame%2==0)
+            img_obj.current = (img_obj.current + 1) % img_obj.total_frames;
         img_obj.x += img_obj.vx * img_obj.velocity;
         img_obj.y += img_obj.vy * img_obj.velocity;
     }
+    var coord = get_cell();
+    if(!path.includes(coord))
+        path.push(coord);
+}
+
+function draw_path(){
+    for (var i=0; i<path.length; i++){
+         var coord = path[i];
+         context.fillStyle = "blue";
+         context.fillRect(coord[0]*CELL_SIZE, coord[1]*CELL_SIZE,
+                            CELL_SIZE, CELL_SIZE);
+     }
+}
+
+function draw_flag(){
+    context.drawImage(flag, flag_frame * 32, 0,
+                      32, 32,
+                      (0.5+flag_coord[0])*CELL_SIZE,
+                      (-0.5+flag_coord[1])*CELL_SIZE, 32, 32);
+    if(frame%5==0)
+        flag_frame = (flag_frame+1)%3;
 }
 
 function draw_gold(){
@@ -285,6 +326,16 @@ function is_gold(coord){
     return mapstr[i]=="*";
 }
 
+function next_is_coin(){
+    var coord = get_cell();
+    coord[0] += img_obj.vx;
+    coord[1] += img_obj.vy;
+    if(is_gold(coord)){ //topleft
+        return true;
+    }
+    return false;
+}
+
 function set_mapstr(coord, symbol){
     var i = nx * coord[1] + coord[0];
     mapstr[i] = symbol;
@@ -362,6 +413,7 @@ function initialize_run(){
     walls_v = [];
     walls_h = [];
     coins = [];
+    path = [];
     pretty_walls();
     for(var i=0; i<mapstr.length; i++){
         var x = i%nx;
@@ -373,6 +425,7 @@ function initialize_run(){
         else if(mapstr[i]=="o"){
             img_obj.x = x*CELL_SIZE;
             img_obj.y = y*CELL_SIZE;
+            flag_coord = [x,y];
         }
         else if(mapstr[i]=="*"){
             coins.push([x,y,i%2]);
@@ -398,6 +451,7 @@ function main_loop(){
         check_conditions();
         process_user_code();
         draw_anim();
+        update_char_pos();
         currentRequest = requestAnimationFrame(main_loop);
         if(frame%100==0){
             console.log(Date.now() -a, frame);
@@ -577,15 +631,24 @@ function collect_user_code(e, code, level){
     }
 }
 
+function get_instruction(line){
+    // var instruction = line.trim();
+    var instruction = line.replace(/ +(?= )/g,'');
+    var sep = instruction.split(" ");
+    var expression = instruction.split(sep[1])[0].trim();
+    return [instruction, sep, expression];
+}
+
 function check_code_errors(to_treat){
     var level = 0;
     for(var i=0; i<to_treat.length; i++){
-        var sep = to_treat[i].split(":");
-        var instruction = to_treat[i].trim();
-        var expression = instruction.split(sep[1])[0];
+        var parsed = get_instruction(to_treat[i]);
+        var instruction = parsed[0];
+        var sep = parsed[1];
+        var expression = parsed[2];
         var itxt = (i+1).toString();
         if(expression == MOVE){
-            if(isNaN(sep[1])){
+            if(isNaN(sep[1].trim())){
                 show_error(INVALID_NUMBER, instruction, itxt);
                 return i;
             }
@@ -604,8 +667,16 @@ function check_code_errors(to_treat){
                     return i;
                 }
             }
-            var is_ifwall = expression==IF_WALL;
-            if(is_repeat || is_ifwall){
+            var is_if = expression==IF;
+            if(is_if){
+                var what = sep[1].trim();
+                if (what != WALL && what != COIN){
+                    show_error(UNKNOWN_INSTRUCTION, instruction, itxt);
+                    return i;
+                }
+            }
+            var is_else = expression==ELSE;
+            if(is_repeat || is_if || is_else){
                 var accolade_line = to_treat[i+1].trim();
                 if(accolade_line != "{"){
                     line_txt = (i+2).toString();
@@ -644,21 +715,26 @@ function check_code_errors(to_treat){
 
 function transpile_user_code(collected, to_treat, code, level){
     console.log("COLLECT", level);
+    var last_if = "";
     for(var i=0; i<to_treat.length; i++){
-        var sep = to_treat[i].split(":");
-        var instruction = to_treat[i].trim();
-        var expression = instruction.split(sep[1])[0];
+        var parsed = get_instruction(to_treat[i]);
+        var instruction = parsed[0];
+        var sep = parsed[1];
+        var expression = parsed[2];
         console.log("TREATING", instruction, sep, expression);
         if(expression == MOVE){
             code.push([MOVE, parseInt(sep[1])]);
+            last_if = "";
         }
         else if(expression == TURN){
             code.push([TURN, sep[1]]);
+            last_if = "";
         }
         else{
             var is_repeat = expression==REPEAT;
-            var is_ifwall = expression==IF_WALL;
-            if(is_repeat || is_ifwall){
+            var is_if = expression==IF;
+            var is_else = expression==ELSE;
+            if(is_repeat || is_if || is_else){
                 var accolade_line = to_treat[i+1].trim();
                 var inner_lines = get_inner_lines(to_treat, i);
                 var inner_code = [];
@@ -666,9 +742,26 @@ function transpile_user_code(collected, to_treat, code, level){
                 if(is_repeat){
                     var n = parseInt(sep[1]);
                     code.push([REPEAT, n, inner_code]);
+                    last_if = "";
                 }
-                else if(is_ifwall)
-                    code.push([IF_WALL, inner_code]);
+                else if(is_else){
+                    if(last_if != ""){
+                        code.push([ELSE, last_if, inner_code]);
+                        last_if = "";
+                    }
+                    else{
+                        show_error(INVALID_ELSE, instruction, (i+1).toString());
+                        return true;
+                    }
+                }
+                else{
+                    var what = sep[1].trim();
+                    if(what == WALL)
+                        code.push([IF_WALL, inner_code]);
+                    else if (what == COIN)
+                        code.push([IF_COIN, inner_code]);
+                    last_if = what;
+                }
                 i += inner_lines.length + 2;
             }
         }
@@ -706,9 +799,7 @@ function get_user_code(){
         var value = document.getElementById("code_pan").value.split("\n");
         for(var i=0; i<value.length; i++){
             var txt = value[i].trim();
-            txt = txt.replace(FOREVER, "1000000");
-            while(txt.includes(" :"))
-                txt = txt.replace(" :", ":");
+            txt = txt.replace(FOREVER, "123456789");
             collected.push(txt);
         }
     }
@@ -753,7 +844,7 @@ function set_current_pan(e){
     current_pan.style.backgroundColor = "red";
 }
 
-function click_pause(){
+function click_restart(){
     gameover = true;
     initialize_run();
     requestAnimationFrame(draw_anim);

@@ -99,8 +99,13 @@ function show_message(text, type_){
 
 function show_error(err, line, n){
     console.log(line,n);
+    line = line.replace("123456789", FOREVER);
+    var optionnal = "";
+    if(line != line.toLowerCase()){
+        optionnal = "<br><br>"+INFO_CAPS;
+    }
     show_message(err + "<br><br>" + LINE_STR + " " + n.toString() +
-                    ': " ' + line + ' "', "error");
+                    ': "' + line + '"' + optionnal, "error");
 }
 
 function quit_msg(e){
