@@ -34,10 +34,10 @@ function set_char_orientation(what){ //bouton stop ; else ; monnaie ; explicatio
 function process_user_code(){
     if(frame < INTERVAL/10){
         img_obj.velocity = 0;
-        return '';
+        return false;
     }
     if(!goal_achieved){
-        return '';
+        return false;
     }
     else{
         var level = instructions_repeat.length - 1; //index of current code
@@ -53,7 +53,7 @@ function process_user_code(){
                 // console.log(img_obj.x);
                 gameover = true;
                 end_of_code = true;
-                return '';
+                return false;
             }
             else{
                 n_repeat[level] -= 1;
@@ -62,7 +62,7 @@ function process_user_code(){
                     instructions_repeat.pop();
                     icode_repeat.pop();
                     // console.log("END OF LOOP");
-                    return '';
+                    return false;
                 }
                 else{
                     icode_repeat[level] = 0; //repeat the loop from zero
@@ -111,8 +111,9 @@ function process_user_code(){
                 icode_repeat.push(-1);
             }
         }
+        return true;
     }
-    return codeline;
+    return false;
 }
 
 function next_is_wall(){
@@ -449,7 +450,9 @@ var a = Date.now();
 function main_loop(){
     if(!gameover){
         check_conditions();
-        process_user_code();
+        while(true)
+            if(!process_user_code())
+                break;
         draw_anim();
         update_char_pos();
         currentRequest = requestAnimationFrame(main_loop);
