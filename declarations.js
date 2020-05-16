@@ -89,18 +89,16 @@ var goal_achieved = true;
 var n_repeat = [1];
 var instructions_repeat = [user_code];
 var icode_repeat = [-1];
-var wall_v = new Image();
-wall_v.src = "./wall_v.png"
-var wall_h = new Image();
-wall_h.src = "./wall_h.png"
+var lava = new Image();
+lava.src = "./lava.png"
+var magma_frame = 0;
 var gold = new Image();
 gold.src = "./coin_rotate_32.png"
 var flag = new Image();
 flag.src = "./flag.png"
 var flag_frame = 0;
 var flag_coord;
-var walls_h = [];
-var walls_v = [];
+var magma = [];
 var coins = [];
 var coins_took = 0;
 var n_coins_initial;

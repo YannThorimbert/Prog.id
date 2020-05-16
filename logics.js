@@ -205,7 +205,7 @@ function draw_anim() { // context is the canvas 2d context.
         draw_grid();
     else
         context.drawImage(grid_img, 0, 0);
-    draw_walls();
+    draw_magma();
     draw_flag();
     context.drawImage(img_obj.source, img_obj.current * img_obj.width, 0,
                           img_obj.width, img_obj.height,
@@ -279,37 +279,17 @@ function draw_grid(){
     */
 }
 
-function pretty_walls(){
-    var new_map = "";
-    console.log(mapstr.length, nx, ny);
-    for(var i=0; i<mapstr.length; i++){
-        if (mapstr[i] == "w" || mapstr[i] == "h"){
-            var x = i%nx;
-            var y = parseInt(i/nx);
-            var i_bottom = nx * (y+1) + x;
-            var below_is_wall = "whv".includes(mapstr[i_bottom]);
-            if(i_bottom >= mapstr.length || below_is_wall){
-                new_map += "v";
-            }
-            else{
-                new_map += "h";
-            }
-        }
-        else
-            new_map += mapstr[i];
+function draw_magma(){
+    for (var i=0; i < magma.length; i++){
+        var x = magma[i][0];
+        var y = magma[i][1];
+        context.drawImage(lava, magma_frame * 32, 0,
+                          32, 32,
+                          x*CELL_SIZE,
+                          y*CELL_SIZE, 32, 32);
     }
-    mapstr = new_map;
-}
-
-function draw_walls(){
-    for (var i=0; i < walls_v.length; i++){
-        var pix = [walls_v[i][0]*CELL_SIZE, walls_v[i][1]*CELL_SIZE];
-        context.drawImage(wall_v, pix[0], pix[1]);
-    }
-    for (var i=0; i < walls_h.length; i++){
-        var pix = [walls_h[i][0]*CELL_SIZE, walls_h[i][1]*CELL_SIZE];
-        context.drawImage(wall_h, pix[0], pix[1]);
-    }
+    if(frame%5==0)
+        magma_frame = (magma_frame+1)%10;
 }
 
 function is_wall(coord){
@@ -322,7 +302,7 @@ function is_wall(coord){
     else if (coord[1] < 0)
         return true;
     var i = nx * coord[1] + coord[0];
-    return mapstr[i]=="v" || mapstr[i]=="h";
+    return mapstr[i]=="w";
 }
 
 function is_gold(coord){
@@ -414,18 +394,14 @@ function initialize_run(){
     n_repeat = [1];
     instructions_repeat = [user_code];
     icode_repeat = [-1];
-    walls_v = [];
-    walls_h = [];
+    magma = [];
     coins = [];
     path = [];
-    pretty_walls();
     for(var i=0; i<mapstr.length; i++){
         var x = i%nx;
         var y = parseInt(i/nx);
-        if(mapstr[i]=="v")
-            walls_v.push([x,y])
-        else if(mapstr[i]=="h")
-            walls_h.push([x,y])
+        if(mapstr[i]=="w")
+            magma.push([x,y])
         else if(mapstr[i]=="o"){
             img_obj.x = x*CELL_SIZE;
             img_obj.y = y*CELL_SIZE;
@@ -858,7 +834,7 @@ function set_current_pan(e){
 function click_restart(){
     gameover = true;
     initialize_run();
-    requestAnimationFrame(draw_anim);
+    currentRequest = requestAnimationFrame(initial_situation);
     //clearInterval(intervalMainLoop);
 }
 
@@ -875,7 +851,7 @@ function final_situation(){
     // if(frame%INTERVAL_ANIM == 0){
         var text;
         var color;
-        if(coins_took == n_coins_initial){
+        if(coins_took == n_coins_initial && coins_took > 0){
             text = GAME_WON;
             color = "green";
             if(map_level.includes(parseInt(mapn)+1)){

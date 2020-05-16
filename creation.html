@@ -49,6 +49,8 @@
                 Murs</button>
             <button id="ucoin" class="user_modif" onclick="refresh_umod(this)">
                 Pièces</button>
+            <button id="usave" class="user_modif" onclick="save_map()">
+                Terminer</button>
         </div>
     </div>
 </div>
@@ -120,13 +122,25 @@
             mapstr = replaceInStr(mapstr, i,"w");
         else if(user_modif=="ucoin")
             mapstr = replaceInStr(mapstr, i,"*");
+        else if(user_modif=="uchar"){
+            mapstr = mapstr.replace("o"," ");
+            mapstr = replaceInStr(mapstr, i, "o");
+        }
         gameover = true;
         initialize_run();
         for(var i=0; i<coins.length; i++)
         {
             coins[i][2] = 0;
         }
-        requestAnimationFrame(draw_anim);
+        currentRequest = requestAnimationFrame(initial_situation);
+    }
+
+    function save_map() {
+    	$.ajax({
+    		type: "POST",
+    		url: 'save_map.php',
+    		data:{data_map:mapstr},
+    	});
     }
     canvas.onmouseup = click_canvas;
     var c = document.getElementById("correction");
