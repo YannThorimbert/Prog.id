@@ -1,7 +1,9 @@
 <?php
-$path = 'usermaps.js';
-$fh = fopen($path, "a+");
-$mapstr = $_POST['data_map']; //get input text
-fwrite($fh, $mapstr); // Write information to the file
-fclose($fh); // Close the file
+if(!empty($_POST['data'])){
+    $data = $_POST['data'];
+    $fname = "usermaps.js";
+    $file = fopen($fname, 'a');//creates new file
+    fwrite($file, $data);
+    fclose($file);
+}
 ?>

@@ -39,9 +39,21 @@
         lmenu.innerHTML += "<button class='level_button' onclick=level_click(this)>" +
                             LEVEL + " " + level.toString() + "</button>"
     }
+    lmenu.innerHTML += "<button class='level_button' onclick=load_user_level()>" +
+                        USER_LEVEL + "</button>"
     function level_click(e){
         var level = e.innerHTML.split(" ")[1].trim();
         location.href='./play.html?mapn=' + level;
+    }
+    function load_user_level(){
+        var result = null;
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.open("GET", "usermaps.js", false);
+        xmlhttp.send();
+        if (xmlhttp.status == 200) {
+            result = xmlhttp.responseText;
+        }
+        return result;
     }
 </script>
 <div class="footer">

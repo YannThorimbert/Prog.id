@@ -60,8 +60,10 @@ const TXT_NEXT_LEVEL = "Passer au niveau suivant ?";
 const YES = "Oui";
 const NO = "Non";
 const LEVEL = "Niveau";
+const USER_LEVEL = "Niveaux créés par les utilisateurs"
 const tabs4 = "&nbsp;".repeat(4);
 const CELL_SIZE = 32;
+const DISPLAY_MAGMA = true;
 var VELOCITY; //must be a divider of cell size
 var icode = 0;
 var frame = 0;
@@ -92,12 +94,21 @@ var icode_repeat = [-1];
 var lava = new Image();
 lava.src = "./lava.png"
 var magma_frame = 0;
+var wall_v = new Image();
+if(DISPLAY_MAGMA)
+    wall_v.src = "./wall_v.png"
+else
+    wall_v.src = "./wall_v_nogrid.png"
+var wall_h = new Image();
+wall_h.src = "./wall_h.png"
 var gold = new Image();
 gold.src = "./coin_rotate_32.png"
 var flag = new Image();
 flag.src = "./flag.png"
 var flag_frame = 0;
 var flag_coord;
+var walls_h = [];
+var walls_v = [];
 var magma = [];
 var coins = [];
 var coins_took = 0;

@@ -196,16 +196,33 @@ function check_conditions(){
 
 }
 
+function predraw(){
+    context.clearRect(0, 0, canvas.width, canvas.height);  // clear canvas
+    if(DISPLAY_MAGMA){
+        draw_floor(); //static
+    }
+    else{
+        draw_grid();
+        draw_walls();
+    }
+}
 
 function draw_anim() { // context is the canvas 2d context.
-    context.clearRect(0, 0, canvas.width, canvas.height);  // clear canvas
+    if(DISPLAY_MAGMA){
+        draw_magma(); //non-static
+        draw_floor(); //static
+    }
+    else{
+        context.clearRect(0, 0, canvas.width, canvas.height);  // clear canvas
+        if(DEBUG)
+            draw_grid();
+        else
+            context.drawImage(grid_img, 0, 0);
+        draw_walls();
+    }
     if(show_path)
         draw_path();
-    if(DEBUG)
-        draw_grid();
-    else
-        context.drawImage(grid_img, 0, 0);
-    draw_magma();
+    /////////////////////////
     draw_flag();
     context.drawImage(img_obj.source, img_obj.current * img_obj.width, 0,
                           img_obj.width, img_obj.height,
@@ -213,6 +230,7 @@ function draw_anim() { // context is the canvas 2d context.
     draw_gold();
 }
 
+var path;
 function update_char_pos(){
     if(img_obj.velocity == 0){
         img_obj.current = 0;
@@ -223,18 +241,26 @@ function update_char_pos(){
         img_obj.x += img_obj.vx * img_obj.velocity;
         img_obj.y += img_obj.vy * img_obj.velocity;
     }
-    var coord = get_cell();
-    if(!path.includes(coord))
-        path.push(coord);
+    const coord = get_cell();
+    path[coord[0]][coord[1]] = true;
 }
 
 function draw_path(){
-    for (var i=0; i<path.length; i++){
-         var coord = path[i];
-         context.fillStyle = "blue";
-         context.fillRect(coord[0]*CELL_SIZE, coord[1]*CELL_SIZE,
-                            CELL_SIZE, CELL_SIZE);
-     }
+    context.fillStyle = "rgba(0,0,255,0.2)";
+    for (var x=0; x<nx; x++){
+        for (var y=0; y<ny; y++){
+            if(path[x][y]){
+                context.fillRect(x*CELL_SIZE, y*CELL_SIZE,
+                                   CELL_SIZE, CELL_SIZE);
+            }
+        }
+    }
+    // for (var i=0; i<path.length; i++){
+    //      var coord = path[i];
+    //      context.fillStyle = "rgba(0,0,255,0.1)";
+    //      context.fillRect(coord[0]*CELL_SIZE, coord[1]*CELL_SIZE,
+    //                         CELL_SIZE, CELL_SIZE);
+    //  }
 }
 
 function draw_flag(){
@@ -258,6 +284,23 @@ function draw_gold(){
             coins[i][2] = current;
         }
     }
+}
+
+function draw_floor(){
+    for(var x=0; x<nx; x++)
+        for(var y=0; y<ny; y++)
+            if(!is_wall([x,y])){
+                var pix = [x*CELL_SIZE, y*CELL_SIZE];
+                context.drawImage(wall_v, pix[0], pix[1]);
+                var i_bottom = nx * (y+1) + x;
+                var below_is_wall = "whv".includes(mapstr[i_bottom]) && y < ny-1;
+                if(below_is_wall)
+                    context.drawImage( wall_h,
+                                        0, 2*CELL_SIZE/3,
+                                        32, 32,
+                                        pix[0], pix[1]+CELL_SIZE,
+                                        32, 2*CELL_SIZE/3);
+            }
 }
 
 function draw_grid(){
@@ -292,6 +335,40 @@ function draw_magma(){
         magma_frame = (magma_frame+1)%10;
 }
 
+function pretty_walls(){
+    var new_map = "";
+    console.log(mapstr.length, nx, ny);
+    for(var i=0; i<mapstr.length; i++){
+        if (mapstr[i] == "w" || mapstr[i] == "h"){
+            var x = i%nx;
+            var y = parseInt(i/nx);
+            var i_bottom = nx * (y+1) + x;
+            var below_is_wall = "whv".includes(mapstr[i_bottom]);
+            if(i_bottom >= mapstr.length || below_is_wall){
+                new_map += "v";
+            }
+            else{
+                new_map += "h";
+            }
+        }
+        else
+            new_map += mapstr[i];
+    }
+    mapstr = new_map;
+}
+
+
+function draw_walls(){
+    for (var i=0; i < walls_v.length; i++){
+        var pix = [walls_v[i][0]*CELL_SIZE, walls_v[i][1]*CELL_SIZE];
+        context.drawImage(wall_v, pix[0], pix[1]);
+    }
+    for (var i=0; i < walls_h.length; i++){
+        var pix = [walls_h[i][0]*CELL_SIZE, walls_h[i][1]*CELL_SIZE];
+        context.drawImage(wall_h, pix[0], pix[1]);
+    }
+}
+
 function is_wall(coord){
     if (coord[0] >= nx)
         return true;
@@ -302,7 +379,10 @@ function is_wall(coord){
     else if (coord[1] < 0)
         return true;
     var i = nx * coord[1] + coord[0];
-    return mapstr[i]=="w";
+    if(DISPLAY_MAGMA)
+        return mapstr[i]=="w";
+    else
+        return mapstr[i]=="v" || mapstr[i]=="h";
 }
 
 function is_gold(coord){
@@ -394,12 +474,26 @@ function initialize_run(){
     n_repeat = [1];
     instructions_repeat = [user_code];
     icode_repeat = [-1];
+	walls_v = [];
+    walls_h = [];
+    if(!DISPLAY_MAGMA)
+        pretty_walls();
     magma = [];
     coins = [];
-    path = [];
+    path = []
+    for (var x=0; x<nx; x++){
+        path.push([]);
+        for (var y=0; y<ny; y++){
+            path[x].push(false);
+        }
+    }
     for(var i=0; i<mapstr.length; i++){
         var x = i%nx;
         var y = parseInt(i/nx);
+if(mapstr[i]=="v")
+            walls_v.push([x,y])
+        else if(mapstr[i]=="h")
+            walls_h.push([x,y])
         if(mapstr[i]=="w")
             magma.push([x,y])
         else if(mapstr[i]=="o"){
@@ -419,8 +513,7 @@ function initialize_run(){
     coins_took = 0;
     //initialize drawing
     if(!DEBUG){
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        draw_grid();
+        predraw()
         grid_img.src = canvas.toDataURL();
     }
 }
