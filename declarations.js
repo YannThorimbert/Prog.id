@@ -2,18 +2,36 @@
 var pattern;
 if(mapn.toString().includes("TUTO"))
     pattern = mapn;
+else if(mapn.toString().startsWith("USER"))
+    pattern = "USER";
 else if(mapn == "EMPTY")
     pattern = "EMPTY";
 else
     pattern = "MAP"+mapn;
 console.log("mapn",mapn);
 console.log("pattern",pattern);
-var mapstr = eval(pattern);
-var ny = eval(pattern + "_ny");
-var nx = mapstr.length / ny;
-var initial_code = eval(pattern + "_initial_code");
-var hint = eval(pattern + "_hint");
-var correction = eval(pattern + "_correction");
+var mapstr;
+var nx;
+var ny;
+var initial_code;
+var hint;
+var correction;
+if(pattern == "USER"){
+    mapstr = mapn.toString().split("USER")[1];
+    ny = EMPTY_ny;
+    nx = mapstr.length / ny;
+    initial_code = "";
+    hint = "";
+    correction = "";
+}
+else{
+    mapstr= eval(pattern);
+    ny = eval(pattern + "_ny");
+    nx = mapstr.length / ny;
+    initial_code = eval(pattern + "_initial_code");
+    hint = eval(pattern + "_hint");
+    correction = eval(pattern + "_correction");
+}
 var currentRequest = null;
 const INTERVAL = 40;
 const INTERVAL_ANIM = 10;

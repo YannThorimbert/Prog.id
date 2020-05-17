@@ -210,7 +210,11 @@ function predraw(){
 function draw_anim() { // context is the canvas 2d context.
     if(DISPLAY_MAGMA){
         draw_magma(); //non-static
-        draw_floor(); //static
+        if(DEBUG){
+            draw_floor(); //static
+        }
+        else
+            context.drawImage(grid_img, 0, 0);
     }
     else{
         context.clearRect(0, 0, canvas.width, canvas.height);  // clear canvas

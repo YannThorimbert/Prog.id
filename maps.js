@@ -1,15 +1,21 @@
 var EMPTY =
-"wwwwwwwwwwwwww"+
-"w            w"+
-"w            w"+
-"w            w"+
-"w o          w"+
-"w            w"+
-"w            w"+
-"w            w"+
-"w            w"+
-"wwwwwwwwwwwwww";
-var EMPTY_ny = 10;
+"wwwwwwwwwwwwwwww"+
+"w              w"+
+"w              w"+
+"w              w"+
+"w              w"+
+"w              w"+
+"w              w"+
+"w      o       w"+
+"w              w"+
+"w              w"+
+"w              w"+
+"w              w"+
+"w              w"+
+"w              w"+
+"w              w"+
+"wwwwwwwwwwwwwwww";
+var EMPTY_ny = 16;
 var EMPTY_initial_code = "";
 var EMPTY_hint = 'Les trois boutons bleus en-dessous de la carte du niveau te permettent de modifier ce dernier.';
  var EMPTY_correction = "";

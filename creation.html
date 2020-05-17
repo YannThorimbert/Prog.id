@@ -37,11 +37,6 @@
         <button id="restart_button" onclick="click_restart()"></button>
     </div>
     <div id="options_pan">
-        <label class="switch">
-            <input type="checkbox" id="path_ui" onclick="show_path=!show_path">
-            <span class="slider round"></span>
-        </label>
-        <button class="disabled">Montrer le chemin</button>
         <div>
             <button id="uchar" class="user_modif" onclick="refresh_umod(this)">
                 Position initiale</button>
@@ -52,6 +47,11 @@
             <button id="usave" class="user_modif" onclick="save_map()">
                 Terminer</button>
         </div>
+        <label class="switch">
+            <input type="checkbox" id="path_ui" onclick="show_path=!show_path">
+            <span class="slider round"></span>
+        </label>
+        <button class="disabled">Montrer le chemin</button>
     </div>
 </div>
 <script>
@@ -118,13 +118,23 @@
         coord = pix_to_cell(x,y);
         ///////////////////////////////////////////////////////////////////////
         var i = nx * coord[1] + coord[0];
-        if(user_modif=="uwall")
-            mapstr = replaceInStr(mapstr, i,"w");
-        else if(user_modif=="ucoin")
-            mapstr = replaceInStr(mapstr, i,"*");
+        if(user_modif=="uwall"){
+            if(mapstr[i] == "w")
+                mapstr = replaceInStr(mapstr, i," ");
+            else
+                mapstr = replaceInStr(mapstr, i,"w");
+        }
+        else if(user_modif=="ucoin"){
+            if(mapstr[i] == " ")
+                mapstr = replaceInStr(mapstr, i,"*");
+            else
+                mapstr = replaceInStr(mapstr, i," ");
+        }
         else if(user_modif=="uchar"){
-            mapstr = mapstr.replace("o"," ");
-            mapstr = replaceInStr(mapstr, i, "o");
+            if(mapstr[i] == " "){
+                mapstr = mapstr.replace("o"," ");
+                mapstr = replaceInStr(mapstr, i, "o");
+            }
         }
         gameover = true;
         initialize_run();

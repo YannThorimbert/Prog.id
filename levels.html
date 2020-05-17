@@ -53,7 +53,18 @@
         if (xmlhttp.status == 200) {
             result = xmlhttp.responseText;
         }
+        parse_user_level(result);
         return result;
+    }
+    function parse_user_level(data){
+        var maps = data.split("\n");
+        var mapstrs = []
+        for(var i=0; i<maps.length; i++)
+            if(maps[i].length > 2)
+                mapstrs.push(maps[i]);
+        console.log(mapstrs);
+        console.log(mapstrs[1]);
+        location.href='./play.html?mapn=USER' + mapstrs[0];
     }
 </script>
 <div class="footer">
