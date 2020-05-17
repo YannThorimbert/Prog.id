@@ -2,16 +2,6 @@
 <html>
 
 
-<!-- TODO:
-*niveaux
-#############################
-*si piece, si mur
-*sinon
-*pour i de 1 à 8: (+tard)
-#############################
-*page principale
- -->
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -39,13 +29,13 @@
         lmenu.innerHTML += "<button class='level_button' onclick=level_click(this)>" +
                             LEVEL + " " + level.toString() + "</button>"
     }
-    lmenu.innerHTML += "<button class='level_button' onclick=load_user_level()>" +
+    lmenu.innerHTML += "<button class='level_button' onclick=load_user_level() id='ulevel_button'>" +
                         USER_LEVEL + "</button>"
     function level_click(e){
         var level = e.innerHTML.split(" ")[1].trim();
         location.href='./play.html?mapn=' + level;
     }
-    function load_user_level(){
+    function get_user_levels_data(){
         var result = null;
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.open("GET", "usermaps.js", false);
@@ -53,17 +43,43 @@
         if (xmlhttp.status == 200) {
             result = xmlhttp.responseText;
         }
-        parse_user_level(result);
         return result;
     }
-    function parse_user_level(data){
+    function get_n_user_levels(){
+        var data = get_user_levels_data();
         var maps = data.split("\n");
+        var mapstrs = []
+        for(var i=0; i<maps.length; i++)
+            if(maps[i].length > 8)
+                mapstrs.push(maps[i]);
+        return mapstrs.length;
+    }
+    var data_level;
+    function load_user_level(){
+        if(!document.getElementById("form_ulevel")){
+            var s = '<div id="form_ulevel"><form onsubmit="parse_user_level(this.value);">' +
+              '<label for="level">Choisis le numéro du niveau : </label>'+
+              '<select id="level">';
+            for(var i=0; i<get_n_user_levels(); i++){
+                s += '<option value="' + i.toString() + '">' + i.toString() +'</option>';
+            }
+              s += "</select>"+ '<input type="submit"> </form></div>';
+            document.getElementById("levelmenu").innerHTML += s;
+        }
+    }
+    function parse_user_level(n){
+        n = parseInt(n);
+        data_level = get_user_levels_data();
+        alert("***" + n.toString());
+        alert(data_level.length);
+        var maps = data_level.split("\n");
         var mapstrs = []
         for(var i=0; i<maps.length; i++)
             if(maps[i].length > 2)
                 mapstrs.push(maps[i]);
-        console.log(mapstrs);
-        console.log(mapstrs[1]);
+        alert(mapstrs.length);
+        alert(mapstrs);
+        alert(mapstrs[n]);
         location.href='./play.html?mapn=USER' + mapstrs[0];
     }
 </script>

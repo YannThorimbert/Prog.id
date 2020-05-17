@@ -105,10 +105,10 @@ var MAP5 =
 "w    *     * w"+
 "wwwwwwwwwwwwww";
 var MAP5_ny = 7;
-var MAP5_initial_code =  "répéter toujours\n{\n    si mur\n    {\n        tourner 180\n"+
+var MAP5_initial_code =  "répéter toujours\n{\n    si magma\n    {\n        tourner 180\n"+
                         "    }\n    avancer 1\n}";
 var MAP5_hint = "Teste le code et modifie-le pour attraper les pièces avec peu d'instructions.";
-var MAP5_correction = "répéter toujours\n{\n    si mur\n    {\n        tourner 90\n"+
+var MAP5_correction = "répéter toujours\n{\n    si magma\n    {\n        tourner 90\n"+
                         "    }\n    avancer 1\n}";
 
 

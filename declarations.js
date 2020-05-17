@@ -44,7 +44,7 @@ const TXT_AFTER_TURN = "";
 const REPEAT = "répéter";
 const TXT_AFTER_REPEAT = " fois";
 const IF = "si"
-const WALL = "mur";
+const WALL = "magma";
 const IF_WALL = IF + " " + WALL;
 const COIN = "pièce";
 const IF_COIN = IF + " " + COIN;
@@ -81,7 +81,7 @@ const LEVEL = "Niveau";
 const USER_LEVEL = "Niveaux créés par les utilisateurs"
 const tabs4 = "&nbsp;".repeat(4);
 const CELL_SIZE = 32;
-const DISPLAY_MAGMA = true;
+const DISPLAY_MAGMA = false;
 var VELOCITY; //must be a divider of cell size
 var icode = 0;
 var frame = 0;

@@ -33,11 +33,11 @@ var TUTO2 =
 var TUTO2_ny = 10;
 var TUTO2_initial_code =
 "répéter toujours\n{\n"+
-"    si mur\n    {\n"+
+"    si magma\n    {\n"+
 "       tourner 90\n    }\n"+
 "    avancer 1\n}";
 var TUTO2_hint = '';
-var TUTO2_title = "Détecter les murs"
+var TUTO2_title = "Détecter les obstacles"
 var TUTO2_correction = 'En changeant l\'angle de "90" à "aléatoire", on peut colorier beaucoup plus de cases'+
 " si l'on attend suffisamment de temps... Mais certaines cases ne seront jamais coloriées. Sais-tu lesquelles ?";
 
@@ -83,11 +83,11 @@ var TUTO4 =
 var TUTO4_ny = 11;
 var TUTO4_initial_code =
 "répéter toujours\n{\n"+
-"    si mur\n    {\n"+
+"    si magma\n    {\n"+
 "       tourner aléatoire\n    }\n"+
 "    sinon\n    {\n"+
 "       avancer 1\n    }\n}";
-var TUTO4_hint = 'Cet algorithme garantit de ne jamais être bloqué contre un mur.';
+var TUTO4_hint = 'Cet algorithme garantit de ne jamais être bloqué par le magma.';
 var TUTO4_title = 'Utilisation du "sinon"'
 var TUTO4_correction = " "
 
