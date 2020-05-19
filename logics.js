@@ -1,3 +1,9 @@
+function replaceInStr(s, index, replacement) {
+    return s.substr(0, index) +
+            replacement +
+            s.substr(index + replacement.length);
+}
+
 function get_cell(){
     return pix_to_cell(img_obj.x+CELL_SIZE/2, img_obj.y+CELL_SIZE/2)
 }
@@ -410,7 +416,8 @@ function next_is_coin(){
 
 function set_mapstr(coord, symbol){
     var i = nx * coord[1] + coord[0];
-    mapstr[i] = symbol;
+    // mapstr[i] = symbol;
+    mapstr = replaceInStr(mapstr, i, symbol);
 }
 
 function remove_coin(coord){
@@ -419,7 +426,7 @@ function remove_coin(coord){
             sound_coin.pause();
             sound_coin.currentTime = 0;
             sound_coin.play();
-            coins.splice(i,1);
+            coins.splice(i,1); //remove element number i (1 times)
             set_mapstr(coord, " ");
             coins_took ++;
             break;
@@ -471,6 +478,7 @@ function initialize_run(){
         cancelAnimationFrame(currentRequest);
         currentRequest = null;
     }
+    mapstr = ORIGINAL_MAPSTR;
     VELOCITY = 4; //must be a divider of cell size
     end_of_code = false;
     icode = 0;
@@ -530,9 +538,17 @@ var a = Date.now();
 function main_loop(){
     if(!gameover){
         check_conditions();
-        while(true)
+        const MAX_N = 10000;
+        var i = 0;
+        while(i < MAX_N){
             if(!process_user_code())
                 break;
+            i++;
+        }
+        if(i==MAX_N){
+            gameover = true;
+            show_message(END_LOOP, "error");
+        }
         draw_anim();
         update_char_pos();
         currentRequest = requestAnimationFrame(main_loop);

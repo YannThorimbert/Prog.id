@@ -208,6 +208,9 @@ canvas{
 .info{
     background-color: blue;
 }
+.notitle{
+    background-color: blue;
+}
 .msg_title{
     font-size: 2.2em;
     color: yellow;

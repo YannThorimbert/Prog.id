@@ -37,6 +37,7 @@ else{
     console.log(mapstr);
     console.log(nx, ny);
 }
+var ORIGINAL_MAPSTR = mapstr.slice();
 var currentRequest = null;
 const INTERVAL = 40;
 const INTERVAL_ANIM = 10;
@@ -78,7 +79,8 @@ const EXAMPLES = "Exemples";
 const CREATION = "Création";
 const CORRECTION = "Afficher une solution";
 const MORE = "Pour aller plus loin...";
-const TITLES = {"error":"Erreur", "hint":"Consigne", "info":MORE};
+const END_LOOP = "Le bonhomme n'a rien à faire..."
+const TITLES = {"error":"Erreur", "hint":"Consigne", "info":MORE, "notitle":""};
 const TXT_NEXT_LEVEL = "Passer au niveau suivant ?";
 const YES = "Oui";
 const NO = "Non";
@@ -147,3 +149,12 @@ if(canvas){
 }
 var show_path = false;
 var path = [];
+var ua = navigator.userAgent.toLowerCase();
+
+var comp_type = "";
+if (navigator.userAgent.indexOf('Mac OS X') != -1) {
+  comp_type = "mac";
+}
+else {
+  comp_type = "pc";
+}

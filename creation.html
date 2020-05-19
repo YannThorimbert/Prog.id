@@ -83,9 +83,6 @@
         e.style.color = "yellow";
         e.style.fontSize = "1.5em";
     }
-    replaceInStr = function(s, index, replacement) {
-    return s.substr(0, index) + replacement + s.substr(index + replacement.length);
-    }
     var canvas = document.getElementById("icanvas");
     function click_canvas(event){
         var x;
@@ -111,23 +108,24 @@
         var i = nx * coord[1] + coord[0];
         if(user_modif=="uwall"){
             if(mapstr[i] == "w")
-                mapstr = replaceInStr(mapstr, i," ");
+                set_mapstr(coord," ");
             else
-                mapstr = replaceInStr(mapstr, i,"w");
+                set_mapstr(coord,"w");
         }
         else if(user_modif=="ucoin"){
             if(mapstr[i] == " ")
-                mapstr = replaceInStr(mapstr, i,"*");
+                set_mapstr(coord,"*");
             else
-                mapstr = replaceInStr(mapstr, i," ");
+                set_mapstr(coord," ");
         }
         else if(user_modif=="uchar"){
             if(mapstr[i] == " "){
                 mapstr = mapstr.replace("o"," ");
-                mapstr = replaceInStr(mapstr, i, "o");
+                set_mapstr(coord, "o");
             }
         }
         gameover = true;
+        ORIGINAL_MAPSTR = mapstr.slice();
         initialize_run();
         for(var i=0; i<coins.length; i++)
         {
@@ -143,7 +141,9 @@
         xhr.open( 'post', 'save_map.php', true );
         xhr.send(data);
         var n = get_n_user_levels()-1;
-        alert("Le numéro du niveau créé est : " + n.toString());
+        if(comp_type=="mac")
+            n++;
+        show_message("Le numéro du niveau créé est : " + n.toString(), "notitle");
     }
     canvas.onmouseup = click_canvas;
     var c = document.getElementById("correction");

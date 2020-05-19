@@ -114,6 +114,28 @@ var MAP5_correction = "répéter toujours\n{\n    si magma\n    {\n        tourn
 
 var MAP6 =
 "wwwwwwwwwwwwww"+
+"wo**   ww**  w"+
+"w  ******w*  w"+
+"w   ww  *w*  w"+
+"w   ww **w*  w"+
+"w  *****  *  w"+
+"www*wwww  *  w"+
+"www*wwwww *  w"+
+"www********  w"+
+"w            w"+
+"wwwwwwwwwwwwww";
+var MAP6_ny = 11;
+var MAP6_initial_code = "";
+var MAP6_hint = "Teste le code et modifie-le";
+var MAP6_correction = "répéter toujours\n{\n"+
+"    si pièce\n    {\n"+
+"       avancer 1\n    }\n"+
+"    sinon\n    {\n"+
+"       tourner 90\n    }\n}";
+
+
+var MAP7 =
+"wwwwwwwwwwwwww"+
 "wo           w"+
 "wwwwwww      w"+
 "w            w"+
@@ -124,10 +146,14 @@ var MAP6 =
 "w   wwwwwwwwww"+
 "w          * w"+
 "wwwwwwwwwwwwww";
-var MAP6_ny = 11;
-var MAP6_initial_code = "";
-var MAP6_hint = "Teste le code et modifie-le";
-var MAP6_correction = "";
+var MAP7_ny = 11;
+var MAP7_initial_code = "";
+var MAP7_hint = "Teste le code et modifie-le";
+var MAP7_correction = "répéter toujours\n{\n"+
+"    si magma\n    {\n"+
+"       tourner aléatoire\n    }\n"+
+"    sinon\n    {\n"+
+"       avancer 1\n    }\n}";
 
 
 // var MAP6 =
@@ -160,4 +186,4 @@ var MAP1000_initial_code = "avancer 1\ntourner 90\navancer 1";
 var MAP1000_hint = '';
 var MAP1000_correction = "";
 
-var map_level = [1,2,3,4,5,6];
+var map_level = [1,2,3,4,5,6,7];
