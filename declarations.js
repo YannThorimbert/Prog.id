@@ -1,4 +1,4 @@
-
+const DISPLAY_MAGMA = true;
 var pattern;
 if(mapn.toString().includes("TUTO"))
     pattern = mapn;
@@ -8,8 +8,8 @@ else if(mapn == "EMPTY")
     pattern = "EMPTY";
 else
     pattern = "MAP"+mapn;
-console.log("mapn",mapn);
-console.log("pattern",pattern);
+console.log("mapn"+mapn);
+console.log("pattern"+pattern);
 var mapstr;
 var nx;
 var ny;
@@ -17,9 +17,12 @@ var initial_code;
 var hint;
 var correction;
 if(pattern == "USER"){
+    console.log("USER PATTERN");
     mapstr = mapn.toString().split("USER")[1];
     ny = EMPTY_ny;
     nx = mapstr.length / ny;
+    console.log(mapstr);
+    console.log(nx, ny);
     initial_code = "";
     hint = "";
     correction = "";
@@ -31,6 +34,8 @@ else{
     initial_code = eval(pattern + "_initial_code");
     hint = eval(pattern + "_hint");
     correction = eval(pattern + "_correction");
+    console.log(mapstr);
+    console.log(nx, ny);
 }
 var currentRequest = null;
 const INTERVAL = 40;
@@ -44,7 +49,7 @@ const TXT_AFTER_TURN = "";
 const REPEAT = "répéter";
 const TXT_AFTER_REPEAT = " fois";
 const IF = "si"
-const WALL = "magma";
+const WALL = "magma"; //disp_wall
 const IF_WALL = IF + " " + WALL;
 const COIN = "pièce";
 const IF_COIN = IF + " " + COIN;
@@ -81,7 +86,6 @@ const LEVEL = "Niveau";
 const USER_LEVEL = "Niveaux créés par les utilisateurs"
 const tabs4 = "&nbsp;".repeat(4);
 const CELL_SIZE = 32;
-const DISPLAY_MAGMA = false;
 var VELOCITY; //must be a divider of cell size
 var icode = 0;
 var frame = 0;

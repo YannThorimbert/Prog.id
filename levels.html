@@ -19,6 +19,7 @@
 <script src="./maps.js"></script>
 <script src="./declarations.js"></script>
 <div id="levelmenu"></div>
+<script src="./levels.js"></script>
 <script>
     document.getElementById("button_project").innerHTML = PROJECT;
     document.getElementById("button_level").innerHTML = CHOOSE_LEVEL;
@@ -31,57 +32,6 @@
     }
     lmenu.innerHTML += "<button class='level_button' onclick=load_user_level() id='ulevel_button'>" +
                         USER_LEVEL + "</button>"
-    function level_click(e){
-        var level = e.innerHTML.split(" ")[1].trim();
-        location.href='./play.html?mapn=' + level;
-    }
-    function get_user_levels_data(){
-        var result = null;
-        var xmlhttp = new XMLHttpRequest();
-        xmlhttp.open("GET", "usermaps.js", false);
-        xmlhttp.send();
-        if (xmlhttp.status == 200) {
-            result = xmlhttp.responseText;
-        }
-        return result;
-    }
-    function get_n_user_levels(){
-        var data = get_user_levels_data();
-        var maps = data.split("\n");
-        var mapstrs = []
-        for(var i=0; i<maps.length; i++)
-            if(maps[i].length > 8)
-                mapstrs.push(maps[i]);
-        return mapstrs.length;
-    }
-    var data_level;
-    function load_user_level(){
-        if(!document.getElementById("form_ulevel")){
-            var s = '<div id="form_ulevel"><form onsubmit="parse_user_level(this.value);">' +
-              '<label for="level">Choisis le numéro du niveau : </label>'+
-              '<select id="level">';
-            for(var i=0; i<get_n_user_levels(); i++){
-                s += '<option value="' + i.toString() + '">' + i.toString() +'</option>';
-            }
-              s += "</select>"+ '<input type="submit"> </form></div>';
-            document.getElementById("levelmenu").innerHTML += s;
-        }
-    }
-    function parse_user_level(n){
-        n = parseInt(n);
-        data_level = get_user_levels_data();
-        alert("***" + n.toString());
-        alert(data_level.length);
-        var maps = data_level.split("\n");
-        var mapstrs = []
-        for(var i=0; i<maps.length; i++)
-            if(maps[i].length > 2)
-                mapstrs.push(maps[i]);
-        alert(mapstrs.length);
-        alert(mapstrs);
-        alert(mapstrs[n]);
-        location.href='./play.html?mapn=USER' + mapstrs[0];
-    }
 </script>
 <div class="footer">
     (C) 2020 Yann Thorimbert<br>

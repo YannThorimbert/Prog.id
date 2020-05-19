@@ -48,20 +48,13 @@ body{
     color : white;
 }
 #code_pan, #help_pan{
-    /* float:left; */
-    /* display: block; */
-    /* margin : 5px; */
-    /* min-width : 300px; */
-    /* min-height : 400px; */
-    /* padding: 8px; */
-    /* margin-bottom: 10px; */
-    /* font-size:1.5em; */
     border-radius : 8px;
 }
 #code_pan{
     min-height : 400px;
     min-width: 400px;
     height:auto;
+    padding:4px;
 }
 #help_pan{
     border:dashed 2px;

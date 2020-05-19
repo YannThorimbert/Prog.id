@@ -33,6 +33,7 @@ function rebuild_line_numbers(length){
         n.innerHTML += i.toString() + "<br>";
 }
 
+
 surdiv.appendChild(n);
 rebuild_line_numbers(initial_code.split("\n").length);
 
@@ -54,6 +55,9 @@ else if(MODE == "code"){
 e.id = "code_pan";
 e.focus();
 surdiv.appendChild(e);
+
+document.getElementById("lines_number").style.fontSize = document.getElementById("code_pan").style.fontSize;
+document.getElementById("lines_number").style.fontFamily = document.getElementById("code_pan").style.fontFamily;
 
 e = document.createElement("div");
 e.innerHTML = "<button id='correction' onclick='show_correction()'>" + CORRECTION + "</div>";

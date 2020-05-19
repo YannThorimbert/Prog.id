@@ -1,23 +1,23 @@
 var EMPTY =
-"wwwwwwwwwwwwwwww"+
-"w              w"+
-"w              w"+
-"w              w"+
-"w              w"+
-"w              w"+
-"w              w"+
-"w      o       w"+
-"w              w"+
-"w              w"+
-"w              w"+
-"w              w"+
-"w              w"+
-"w              w"+
-"w              w"+
-"wwwwwwwwwwwwwwww";
-var EMPTY_ny = 16;
+"wwwwwwwwwwwwwww"+
+"wo            w"+
+"w             w"+
+"w             w"+
+"w             w"+
+"w             w"+
+"w             w"+
+"w             w"+
+"w             w"+
+"w             w"+
+"w             w"+
+"w             w"+
+"w             w"+
+"w             w"+
+"wwwwwwwwwwwwwww";
+var EMPTY_ny = 15;
 var EMPTY_initial_code = "";
-var EMPTY_hint = 'Les trois boutons bleus en-dessous de la carte du niveau te permettent de modifier ce dernier.';
+var EMPTY_hint = 'Les boutons bleus en-dessous de la carte du niveau te permettent de modifier et d\'enregistrer ce dernier.'+
+"<br><br>Quand tu auras terminé, un numéro sera donné à ton niveau. N'oublie pas de le retenir afin de le transmettre à d'autres personnes.";
  var EMPTY_correction = "";
 
 var MAP1 =

@@ -227,10 +227,14 @@ function draw_anim() { // context is the canvas 2d context.
     if(show_path)
         draw_path();
     /////////////////////////
-    draw_flag();
+    var flag_below = img_obj.y < flag_coord[1]*CELL_SIZE;
+    if(!flag_below)
+        draw_flag();
     context.drawImage(img_obj.source, img_obj.current * img_obj.width, 0,
                           img_obj.width, img_obj.height,
                           img_obj.x, img_obj.y, img_obj.width, img_obj.height);
+    if(flag_below)
+        draw_flag();
     draw_gold();
 }
 
