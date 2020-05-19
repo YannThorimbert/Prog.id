@@ -61,6 +61,8 @@ document.getElementById("lines_number").style.fontFamily = document.getElementBy
 
 e = document.createElement("div");
 e.innerHTML = "<button id='correction' onclick='show_correction()'>" + CORRECTION + "</div>";
+e.innerHTML += "<button id='acc1' onclick='acc1()'> { </div>";
+e.innerHTML += "<button id='acc2' onclick='acc2()'> } </div>";
 e.style.display = "flex";
 surdiv.appendChild(e);
 
@@ -86,7 +88,8 @@ var buttons = [["move_button","click_move();", MOVE],
                 ["turn_button","click_turn();", TURN],
                 ["repeat_button","click_repeat();", REPEAT],
                 ["ifwall_button","click_ifwall();", IF_WALL],
-                ["ifcoin_button","click_ifcoin();", IF_COIN]
+                ["ifcoin_button","click_ifcoin();", IF_COIN],
+                ["acc_button","", "{  &nbsp; }"]
                 ];
 var DESCR_MOVE = "Exemple pour avancer de 3 cases";
 var DESCR_TURN = "Exemple pour tourner de 90 degrés dans le sens horaire";
@@ -95,6 +98,10 @@ var DESCR_IFWALL = "Exemple pour réagir face au magma";
 var DESCR_IFCOIN = "Exemple pour réagir avant une pièce";
 var DESCR_REPEAT = "Exemple pour répéter 4 fois des ordres";
 var DESCR_REPEAT_FOREVER = "Pour répéter sans cesse";
+var DESCR_ACCOLADES = 'Écrire une accolade ouvrante "{" ou fermante "}"';
+var ACCOLADE_TXT = 'Sur Mac : Alt + 8 et Alt + 9 <br>'+
+            'Sur PC : AltGr + "à" et AltGr + "$" <br><br>'+
+            'Si ça ne marche pas, tu peux également utiliser les boutons "{" et "}" en-dessous de la zone de code.'
 var EXAMPLES_TXT = {"move_button":'<div class="example_title">' +
                                     DESCR_MOVE + "</div>" + MOVE.replace(":"," :")+" 3",
                     "turn_button":'<div class="example_title">' +
@@ -115,8 +122,10 @@ var EXAMPLES_TXT = {"move_button":'<div class="example_title">' +
 
                                     '<div class="example_title">' +
                                     DESCR_REPEAT_FOREVER + "</div>" +
-                                        REPEAT.replace(":"," :") + " " + FOREVER// +
+                                        REPEAT.replace(":"," :") + " " + FOREVER,// +
                                     // "<br>{<br>" + tabs4 + "...<br>}"
+                    "acc_button" : '<div class="example_title">' +
+                                    DESCR_ACCOLADES + "</div>" + ACCOLADE_TXT
                     };
 function attribute_help(item, index) {
     var b = document.createElement("button");

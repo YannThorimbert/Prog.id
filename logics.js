@@ -226,6 +226,7 @@ function draw_anim() { // context is the canvas 2d context.
     }
     if(show_path)
         draw_path();
+    draw_gold();
     /////////////////////////
     var flag_below = img_obj.y < flag_coord[1]*CELL_SIZE;
     if(!flag_below)
@@ -235,7 +236,6 @@ function draw_anim() { // context is the canvas 2d context.
                           img_obj.x, img_obj.y, img_obj.width, img_obj.height);
     if(flag_below)
         draw_flag();
-    draw_gold();
 }
 
 var path;
@@ -990,4 +990,33 @@ function show_correction(){
     }
     else
         document.getElementById("code_pan").value = correction;
+}
+
+function insertAtCursor(myField, myValue) {
+    //IE support
+    if (document.selection) {
+        myField.focus();
+        sel = document.selection.createRange();
+        sel.text = myValue;
+    }
+    //MOZILLA and others
+    else if (myField.selectionStart || myField.selectionStart == '0') {
+        var startPos = myField.selectionStart;
+        var endPos = myField.selectionEnd;
+        myField.value = myField.value.substring(0, startPos)
+            + myValue
+            + myField.value.substring(endPos, myField.value.length);
+    } else {
+        myField.value += myValue;
+    }
+}
+
+function acc1(){
+    var cp = document.getElementById("code_pan");
+    insertAtCursor(cp, "{");
+}
+
+function acc2(){
+    var cp = document.getElementById("code_pan");
+    insertAtCursor(cp, "}");
 }

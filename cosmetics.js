@@ -66,8 +66,8 @@ function mouseOver(e){
         current_example_hover = e
         var event = window.event;
         var divMouse = document.getElementById('divMouse');
-        divMouse.style.left = event.clientX - 300 + "px";
-        divMouse.style.top = event.clientY + 5 + "px";
+        // divMouse.style.left = event.clientX - 300 + "px";
+        // divMouse.style.top = event.clientY - 300 + "px";
         divMouse.style.display = 'block';
         divMouse.innerHTML = EXAMPLES_TXT[e.id];
     }
@@ -83,8 +83,8 @@ function handleMouseMove(event) {
     if(current_example_hover != ""){
         event = event || window.event; // IE-ism
         var divMouse = document.getElementById('divMouse');
-        divMouse.style.left = event.clientX - 300 + "px";
-        divMouse.style.top = event.clientY + 5 + "px";
+        // divMouse.style.left = event.clientX - 300 + "px";
+        // divMouse.style.top = event.clientY - 300 + "px";
     }
 }
 

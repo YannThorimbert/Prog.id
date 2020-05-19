@@ -103,9 +103,9 @@ button:hover{
     display: block;
     background-color: CornflowerBlue;
     margin:auto;
-    margin-top: 20px;
-    padding:15px;
-    margin-bottom:20px;
+    margin-top: 10px;
+    padding:10px;
+    margin-bottom:10px;
 }
 .block_lines{
     min-width : 100px;
@@ -150,19 +150,27 @@ canvas{
     background-color: white;
 }
 #divMouse{
-    background-color: rgba(255,255,255,0.8);
     position: fixed;
-    border-radius: 5px;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: solid;
+    border-radius: 8px;
     box-shadow: 5px 5px 10px;
+    max-width: 30%;
     padding: 10px;
     font-size: 1.5em;
-    margin-right:20px;
-    margin-bottom:20px;
+    margin-right:10px;
+    margin-bottom:10px;
+    /* text-align: center; */
 }
 .example_title{
     color: red;
     margin:20px;
-
+    background-color: yellow;
+    border-radius: 4px;
+    padding:2px;
 }
 #topmenu{
     text-align:center;
