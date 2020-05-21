@@ -6,7 +6,7 @@ function level_click(e){
 function get_user_levels_data(){
     var result = null;
     var xmlhttp = new XMLHttpRequest();
-    xmlhttp.open("GET", "usermaps.js", false);
+    xmlhttp.open("GET", "usermaps.dat", false);
     xmlhttp.send();
     if (xmlhttp.status == 200) {
         result = xmlhttp.responseText;

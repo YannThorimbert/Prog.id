@@ -126,7 +126,7 @@ var MAP6 =
 "wwwwwwwwwwwwww";
 var MAP6_ny = 11;
 var MAP6_initial_code = "";
-var MAP6_hint = "Teste le code et modifie-le";
+var MAP6_hint = "";
 var MAP6_correction = "répéter toujours\n{\n"+
 "    si pièce\n    {\n"+
 "       avancer 1\n    }\n"+
@@ -148,7 +148,7 @@ var MAP7 =
 "wwwwwwwwwwwwww";
 var MAP7_ny = 11;
 var MAP7_initial_code = "";
-var MAP7_hint = "Teste le code et modifie-le";
+var MAP7_hint = "";
 var MAP7_correction = "répéter toujours\n{\n"+
 "    si magma\n    {\n"+
 "       tourner aléatoire\n    }\n"+
