@@ -56,8 +56,6 @@ e.id = "code_pan";
 e.focus();
 surdiv.appendChild(e);
 
-document.getElementById("lines_number").style.fontSize = document.getElementById("code_pan").style.fontSize;
-document.getElementById("lines_number").style.fontFamily = document.getElementById("code_pan").style.fontFamily;
 
 e = document.createElement("div");
 e.innerHTML = "<button id='correction' onclick='show_correction()'>" + CORRECTION + "</div>";

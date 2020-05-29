@@ -74,6 +74,11 @@
     img_obj.velocity = 1;
     currentRequest = requestAnimationFrame(initial_situation);
     img_obj.velocity = 0;
+    document.getElementById("lines_number").style.fontFamily = document.getElementById("code_pan").style.fontFamily;
+    document.getElementById("lines_number").style.fontSize = document.getElementById("code_pan").style.fontSize;
+    document.getElementById("lines_number").style.padding = document.getElementById("code_pan").style.padding;
+    console.log("LN FS", document.getElementById("lines_number").style.fontSize);
+    console.log("CP FS", document.getElementById("code_pan").style.fontSize);
 </script>
 <div class="footer">
     (C) 2020 Yann Thorimbert<br>

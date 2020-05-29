@@ -983,7 +983,7 @@ function final_situation(){
             text = GAME_OVER;
             color = "red";
         }
-        context.font = "40px Arial";
+        context.font = "40px sans-serif";
         context.rect(0,0,canvas.width,canvas.height);
         context.fillStyle = "rgba(255, 255, 255, 0.5)";
         context.fill();

@@ -142,7 +142,9 @@
         xhr.send(data);
         // if(comp_type=="mac")
         //     n++;
-        show_message("Le numéro du niveau créé est : " + n_maps.toString(), "notitle");
+        show_message("Le numéro du niveau créé est : " + n_maps.toString() + "." +
+        "<br>Ton niveau sera disponible pour chacun dans quelques temps dans l'onglet"+
+        ' "Choisir un niveau"'., "notitle");
     }
     canvas.onmouseup = click_canvas;
     var c = document.getElementById("correction");
