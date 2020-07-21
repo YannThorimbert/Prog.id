@@ -1,3 +1,19 @@
+function msieversion() {
+
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./))  // If Internet Explorer, return version number
+    {
+        alert("Ce site n'est pas compatible avec Internet Explorer... Merci d'utiliser un autre navigateur.");
+    }
+
+    return false;
+}
+
+msieversion();
+
+
 function replaceInStr(s, index, replacement) {
     return s.substr(0, index) +
             replacement +
@@ -895,7 +911,7 @@ function get_inner_lines(collected, icode){
 
 function get_user_code(){
     var collected = [];
-    if(MODE=="blocks"){
+    if(MODE == "blocks"){
         var e = document.getElementById("code_pan");
         collect_user_code(e, collected, 0);
     }
@@ -903,8 +919,10 @@ function get_user_code(){
         var value = document.getElementById("code_pan").value.split("\n");
         for(var i=0; i<value.length; i++){
             var txt = value[i].trim();
-            txt = txt.replace(FOREVER, "123456789");
-            collected.push(txt);
+            if(txt != ""){ //ignore empty lines
+                txt = txt.replace(FOREVER, "123456789");
+                collected.push(txt);
+            }
         }
     }
     console.log("COLLECTED:");
@@ -1025,6 +1043,7 @@ function insertAtCursor(myField, myValue) {
     } else {
         myField.value += myValue;
     }
+    myField.focus();
 }
 
 function acc1(){

@@ -6,6 +6,14 @@ document.getElementById("button_level").innerHTML = CHOOSE_LEVEL;
 document.getElementById("button_tuto").innerHTML = EXAMPLES;
 document.getElementById("button_creation").innerHTML = CREATION;
 
+if(level_name){
+    var d = document.createElement("div");
+    d.className = "level_title";
+    d.innerHTML = level_name;
+    document.body.appendChild(d);
+}
+
+
 var d = document.createElement("div");
 d.className = "code_and_help";
 document.body.appendChild(d);
@@ -23,19 +31,7 @@ surdiv.className = "surdiv";
 d.appendChild(surdiv);
 
 
-n = document.createElement("div");
-n.id = "lines_number";
 
-function rebuild_line_numbers(length){
-    var n = document.getElementById("lines_number");
-    n.innerHTML = "";
-    for(var i=1; i<=length; i++)
-        n.innerHTML += i.toString() + "<br>";
-}
-
-
-surdiv.appendChild(n);
-rebuild_line_numbers(initial_code.split("\n").length);
 
 
 //Create textarea or blocks area
@@ -51,11 +47,24 @@ else if(MODE == "code"){
         t.id = "actual_code";
         e.appendChild(t);
     }
+    var elines = document.createElement("textarea");
+    // elines.placeholder = "1\n2\n3";
+    elines.id = "lines_number";
+    elines.disabled = true;
+    surdiv.appendChild(elines);
 }
 e.id = "code_pan";
 e.focus();
 surdiv.appendChild(e);
 
+function rebuild_line_numbers(length){
+    var n = document.getElementById("lines_number");
+    n.innerHTML = "";
+    for(var i=1; i<=length; i++)
+        n.innerHTML += i.toString() + "\n";
+}
+
+rebuild_line_numbers(initial_code.split("\n").length);
 
 e = document.createElement("div");
 e.innerHTML = "<button id='correction' onclick='show_correction()'>" + CORRECTION + "</div>";

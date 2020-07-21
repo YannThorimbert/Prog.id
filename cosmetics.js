@@ -90,7 +90,7 @@ function handleMouseMove(event) {
 
 function show_message(text, type_){
     var e = document.createElement("div");
-    e.className = "centered "+type_;
+    e.className = "centered " + type_;
     e.innerHTML += "<div class='msg_title'>" + TITLES[type_] + "</div>";
     e.innerHTML += "<div class='msg_txt'>" + text + "</div>"
     e.innerHTML += "<button class='valid_msg' onclick='quit_msg(this)'> Ok </button>";

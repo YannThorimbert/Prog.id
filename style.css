@@ -5,6 +5,16 @@ body{
     background-color: BlanchedAlmond;
     margin:0;
 }
+
+em{
+    font-weight: bold;
+    font-style: normal;
+}
+
+h1{
+    margin-left:20%;
+    margin-right: 20%;
+}
 .code_and_help{
     /* background-color: red; */
     float:left;
@@ -41,11 +51,15 @@ body{
 }
 #lines_number{
     /* background-color: white; */
-    max-width: 50px;
+    max-width: 30px;
+    min-height : 400px;
     float:left;
     font-size: 22px;
     padding:4px;
     color : white;
+    overflow: hidden;
+    resize: none;
+    color:gray;
 }
 #code_pan, #help_pan{
     border-radius : 8px;
@@ -347,4 +361,18 @@ input:checked + .slider:before {
 
 .user_modif{
     background-color: blue;
+}
+
+.level_title{
+    font-size: 2em;
+    /* background-color: yellow; */
+    /* text-align: center; */
+    /* margin:auto;
+    */
+    padding-left:40%;
+    padding-right:40%;
+}
+
+a{
+    text-decoration: none;
 }

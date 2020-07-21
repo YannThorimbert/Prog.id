@@ -1,13 +1,16 @@
 const DISPLAY_MAGMA = true;
 var pattern;
+var level_name = "";
 if(mapn.toString().includes("TUTO"))
     pattern = mapn;
 else if(mapn.toString().startsWith("USER"))
     pattern = "USER";
 else if(mapn == "EMPTY")
     pattern = "EMPTY";
-else
+else{
     pattern = "MAP"+mapn;
+    level_name = "Niveau "+mapn;
+}
 console.log("mapn"+mapn);
 console.log("pattern"+pattern);
 var mapstr;
